@@ -43,8 +43,6 @@ export function useResponsive() {
   const isSmOrMd = (isSm || isMd)
   const isMdOrLg = (isMd || isLg);
 
-  // 确定当前断点
-  const currentBreakpoint = isSm ? 'mobile' : isMd ? 'tablet' : 'desktop';
 
   return {
     isSm,
@@ -53,7 +51,6 @@ export function useResponsive() {
     isSmOrMd,
     isMdOrLg,
     windowSize,
-    currentBreakpoint,
     currentWidth,
   };
 }
