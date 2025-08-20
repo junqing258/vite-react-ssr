@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DEFAULT_BREAKPOINTS } from '../types/device';
 import { useWindowSize } from './useWindowSize';
+import { useDevice } from '../components/DeviceContext';
 
 export interface UseResponsiveOptions {
   // 自定义断点
@@ -16,7 +17,8 @@ export interface UseResponsiveOptions {
 }
 
 export function useResponsive(options: UseResponsiveOptions = {}) {
-  const windowSize = useWindowSize();
+  const { deviceInfo } = useDevice();
+  const windowSize = useWindowSize(deviceInfo.defaultWidth);
   const {
     breakpoints = DEFAULT_BREAKPOINTS
   } = options;

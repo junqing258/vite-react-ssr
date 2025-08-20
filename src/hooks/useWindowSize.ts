@@ -5,12 +5,12 @@ export interface WindowSize {
   height: number;
 }
 
-export function useWindowSize(): WindowSize {
+export function useWindowSize(defaultWidth: number): WindowSize {
   // 初始化状态，在服务端返回默认值
   const [windowSize, setWindowSize] = useState<WindowSize>(() => {
     if (typeof window === 'undefined') {
       // 服务端默认尺寸
-      return { width: 1200, height: 800 };
+      return { width: defaultWidth || 1200, height: 800 };
     }
     return {
       width: window.innerWidth,
