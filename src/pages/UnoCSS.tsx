@@ -112,6 +112,55 @@ const UnoCSS: React.FC = () => {
         </div>
       </section>
 
+      {/* CSS Reset 演示 */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">CSS Reset 效果</h2>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <p className="text-gray-600 mb-4">
+            UnoCSS 已启用 Tailwind 风格的 CSS reset，确保跨浏览器的一致性。
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-4 rounded border">
+              <h3 className="font-bold mb-3 text-gray-700">原生HTML元素</h3>
+              <div className="space-y-2">
+                <h1 className="text-2xl">标题 H1</h1>
+                <h2 className="text-xl">标题 H2</h2>
+                <p>这是一个段落文本。Reset确保了默认margin和padding的一致性。</p>
+                <ul className="pl-4">
+                  <li>列表项 1</li>
+                  <li>列表项 2</li>
+                </ul>
+                <button className="px-3 py-1 bg-blue-500 text-white rounded">
+                  原生按钮
+                </button>
+              </div>
+            </div>
+            
+            <div className="bg-white p-4 rounded border">
+              <h3 className="font-bold mb-3 text-gray-700">Reset 特性</h3>
+              <div className="text-sm space-y-2">
+                <div>✅ 统一的 box-sizing: border-box</div>
+                <div>✅ 移除默认的 margin 和 padding</div>
+                <div>✅ 重置边框和轮廓样式</div>
+                <div>✅ 设置合理的字体堆栈</div>
+                <div>✅ 防止字体大小调整</div>
+                <div>✅ 改善行高和字体渲染</div>
+                <div>✅ 统一表单元素样式</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 bg-white p-4 rounded border font-mono text-sm">
+            <div className="text-gray-500 mb-2">// 当前配置:</div>
+            <div>reset: 'tailwind'</div>
+            <div className="text-gray-500 mt-2">// 其他可选项:</div>
+            <div>reset: 'normalize' // Normalize.css</div>
+            <div>reset: 'eric-meyer' // Eric Meyer Reset</div>
+            <div>reset: 'antfu' // Anthony Fu 的 reset</div>
+          </div>
+        </div>
+      </section>
+
       {/* 图标演示 */}
       <section className="mb-12">
         <h2 className="text-3xl font-bold mb-6 text-gray-800">图标（需要配置图标集）</h2>

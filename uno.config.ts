@@ -8,7 +8,10 @@ import {
 
 export default defineConfig({
   presets: [
-    presetUno(),
+    presetUno({
+      // 在 presetUno 中配置 reset
+      reset: 'tailwind', // 可选: 'normalize', 'eric-meyer', 'antfu', 'tailwind'
+    }),
     presetIcons({
       extraProperties: {
         'display': 'inline-block',
