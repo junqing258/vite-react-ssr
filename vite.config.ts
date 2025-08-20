@@ -18,6 +18,9 @@ export default defineConfig(() => {
       }),
       UnoCSS()
     ],
+    ssr: {
+      external: ['react', 'react-dom', 'react-router-dom']
+    },
     build: {
       rollupOptions: {
         output: {
