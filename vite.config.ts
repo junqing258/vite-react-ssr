@@ -18,5 +18,14 @@ export default defineConfig(() => {
       }),
       UnoCSS()
     ],
+    build: {
+      rollupOptions: {
+        output: {
+          advancedChunks: {
+            groups: [{ name: 'vendor', test: /\/react(?:-dom)?/ }]
+          }
+        }
+      }
+    }
   }
 })
