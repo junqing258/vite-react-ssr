@@ -6,13 +6,17 @@ import UnoCSS from 'unocss/vite'
 // https://vite.dev/config/
 export default defineConfig(() => {
   return {
-    plugins: [react(), Pages({
-      dirs: [{ dir: 'src/pages', baseRoute: '/' }],
-      exclude: [
-        '**/component(s)?/**/*.(ts|tsx)',
-        '**/component(s)?/*.(ts|tsx)',
-      ],
-      extensions: ['tsx'],
-    }), UnoCSS()],
+    plugins: [
+      react(),
+      Pages({
+        dirs: [{ dir: 'src/pages', baseRoute: '/' }],
+        exclude: [
+          '**/component(s)?/**/*.(ts|tsx)',
+          '**/component(s)?/*.(ts|tsx)',
+        ],
+        extensions: ['tsx'],
+      }),
+      UnoCSS()
+    ],
   }
 })
