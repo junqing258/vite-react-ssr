@@ -93,6 +93,6 @@ const NavigationMobile: React.FC = () => {
 };
 
 export default function () {
-  const { isMobileOrTablet } = useResponsive();
-  return isMobileOrTablet ? <NavigationMobile /> : <NavigationDesktop />;
+  const { isSmOrMd } = useResponsive();
+  return isSmOrMd ? <NavigationMobile /> : <NavigationDesktop />;
 }

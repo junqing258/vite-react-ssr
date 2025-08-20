@@ -29,29 +29,29 @@ export function useResponsive() {
   // 基于当前窗口尺寸的直接计算（用于实时响应）
   const currentWidth = windowSize.width;
 
-  const [isMobile, setIsMobile] = useState(defaultWidth <= mobileBreakpoint);
-  const [isTablet, setIsTablet] = useState(defaultWidth > mobileBreakpoint && defaultWidth <= tabletBreakpoint);
-  const [isDesktop, setIsDesktop] = useState(defaultWidth > tabletBreakpoint);
+  const [isSm, setIsSm] = useState(defaultWidth <= mobileBreakpoint);
+  const [isMd, setIsMd] = useState(defaultWidth > mobileBreakpoint && defaultWidth <= tabletBreakpoint);
+  const [isLg, setIsLg] = useState(defaultWidth > tabletBreakpoint);
 
   useEffect(() => {
-    setIsMobile(currentWidth <= mobileBreakpoint);
-    setIsTablet(currentWidth > mobileBreakpoint && currentWidth <= tabletBreakpoint);
-    setIsDesktop(currentWidth > tabletBreakpoint);
+    setIsSm(currentWidth <= mobileBreakpoint);
+    setIsMd(currentWidth > mobileBreakpoint && currentWidth <= tabletBreakpoint);
+    setIsLg(currentWidth > tabletBreakpoint);
   }, [currentWidth]);
 
 
-  const isMobileOrTablet = (isMobile || isTablet)
-  const isTabletOrDesktop = (isTablet || isDesktop);
+  const isSmOrMd = (isSm || isMd)
+  const isMdOrLg = (isMd || isLg);
 
   // 确定当前断点
-  const currentBreakpoint = isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
+  const currentBreakpoint = isSm ? 'mobile' : isMd ? 'tablet' : 'desktop';
 
   return {
-    isMobile,
-    isTablet,
-    isDesktop,
-    isMobileOrTablet,
-    isTabletOrDesktop,
+    isSm,
+    isMd,
+    isLg,
+    isSmOrMd,
+    isMdOrLg,
     windowSize,
     currentBreakpoint,
     currentWidth,

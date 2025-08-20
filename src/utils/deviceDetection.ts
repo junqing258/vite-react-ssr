@@ -3,14 +3,14 @@ import { DeviceInfo, DEFAULT_BREAKPOINTS } from '../types/device';
 
 export function detectDevice(userAgent: string): DeviceInfo {
   const md = new MobileDetect(userAgent);
-  
+
   const isMobile = md.mobile() !== null;
   const isTablet = md.tablet() !== null;
   const isDesktop = !isMobile && !isTablet;
-  
+
   let deviceType: 'mobile' | 'tablet' | 'desktop';
   let defaultWidth: number;
-  
+
   if (isTablet) {
     deviceType = 'tablet';
     defaultWidth = DEFAULT_BREAKPOINTS.tablet;
@@ -21,7 +21,7 @@ export function detectDevice(userAgent: string): DeviceInfo {
     deviceType = 'desktop';
     defaultWidth = DEFAULT_BREAKPOINTS.desktop;
   }
-  
+
   return {
     isMobile,
     isTablet,
@@ -32,19 +32,3 @@ export function detectDevice(userAgent: string): DeviceInfo {
   };
 }
 
-// 客户端回退检测（当无法获取服务端 User-Agent 时）
-export function detectDeviceClient(): DeviceInfo {
-  if (typeof window === 'undefined') {
-    // 服务端默认值
-    return {
-      isMobile: false,
-      isTablet: false,
-      isDesktop: true,
-      userAgent: '',
-      deviceType: 'desktop',
-      defaultWidth: DEFAULT_BREAKPOINTS.desktop,
-    };
-  }
-  
-  return detectDevice(window.navigator.userAgent);
-}
