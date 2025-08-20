@@ -8,9 +8,15 @@ import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
 
-export function render(url: string, userAgent: string = '') {
+export function render({
+  url,
+  userAgent,
+}: {
+  url: string;
+  userAgent: string;
+}) {
   const deviceInfo = detectDevice(userAgent);
-  
+
   return new Promise<{ html: string; head: string }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
