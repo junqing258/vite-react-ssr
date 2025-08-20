@@ -15,6 +15,7 @@
     "express": "^5.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-helmet": "^6.1.0",
     "react-router": "^7.8.1",
     "react-router-dom": "^7.8.1",
     "sirv": "^3.0.1"
@@ -24,6 +25,7 @@
     "@types/node": "^24.1.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-helmet": "^6.1.11",
     "@unocss/preset-icons": "^66.4.2",
     "@unocss/preset-typography": "^66.4.2",
     "@unocss/preset-uno": "^66.4.2",

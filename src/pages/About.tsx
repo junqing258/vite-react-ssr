@@ -1,9 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 
 const About: React.FC = () => {
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>关于我们 - Vite React SSR</title>
+        <meta name="description" content="了解我们的技术栈：Vite、React 18、React Router、TypeScript 和 Express 服务器端渲染" />
+        <meta name="keywords" content="关于我们, Vite, React, TypeScript, Express, SSR" />
+        <meta property="og:title" content="关于我们 - Vite React SSR" />
+        <meta property="og:description" content="了解我们的技术栈：Vite、React 18、React Router、TypeScript 和 Express 服务器端渲染" />
+        <link rel="canonical" href="/about" />
+      </Helmet>
+      <div>
       <h1>关于我们</h1>
       <p>
         这是一个基于 Vite、React 和 React Router 构建的现代化单页应用程序。
@@ -43,7 +53,8 @@ const About: React.FC = () => {
           ← 返回首页
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

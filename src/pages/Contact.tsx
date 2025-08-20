@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = React.useState({
@@ -25,7 +26,16 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <>
+      <Helmet>
+        <title>联系我们 - Vite React SSR</title>
+        <meta name="description" content="如果您有任何问题或建议，请随时与我们联系。填写表单发送留言给我们。" />
+        <meta name="keywords" content="联系我们, 反馈, 留言, 问题咨询" />
+        <meta property="og:title" content="联系我们 - Vite React SSR" />
+        <meta property="og:description" content="如果您有任何问题或建议，请随时与我们联系。填写表单发送留言给我们。" />
+        <link rel="canonical" href="/contact" />
+      </Helmet>
+      <div className="max-w-md mx-auto">
       <h1>联系我们</h1>
       <p>如果您有任何问题或建议，请随时与我们联系。</p>
 
@@ -124,7 +134,8 @@ const Contact: React.FC = () => {
           ← 返回首页
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
