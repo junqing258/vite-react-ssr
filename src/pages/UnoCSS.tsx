@@ -2,7 +2,7 @@ import React from 'react';
 
 const UnoCSS: React.FC = () => {
   return (
-    <div className="">
+    <div className="container mx-auto px-4 md:px-0">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
           UnoCSS 演示页面

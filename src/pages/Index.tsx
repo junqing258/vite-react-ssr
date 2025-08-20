@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 const Home: React.FC = () => {
   return (
-    <>
+    <div className="container mx-auto px-4 md:px-0">
       <Helmet>
         <title>首页 - Vite React SSR</title>
         <meta
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
