@@ -11,52 +11,22 @@ const Navigation: React.FC = () => {
     location = { pathname: '/' };
   }
 
-  const navStyle = {
-    padding: '1rem 2rem',
-    backgroundColor: '#f8f9fa',
-    borderBottom: '1px solid #dee2e6',
-    marginBottom: '2rem'
-  };
-
-  const navListStyle = {
-    display: 'flex',
-    listStyle: 'none',
-    margin: 0,
-    padding: 0,
-    gap: '2rem',
-    alignItems: 'center'
-  };
-
-  const linkStyle = (isActive: boolean) => ({
-    textDecoration: 'none',
-    color: isActive ? '#646cff' : '#333',
-    fontWeight: isActive ? 'bold' : 'normal',
-    padding: '0.5rem 1rem',
-    borderRadius: '4px',
-    backgroundColor: isActive ? '#f0f0ff' : 'transparent',
-    transition: 'all 0.2s ease'
-  });
-
-  const logoStyle = {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: '#646cff',
-    textDecoration: 'none',
-    marginRight: 'auto'
-  };
-
   return (
-    <nav style={navStyle}>
-      <ul style={navListStyle}>
+    <nav className="px-8 py-4 bg-gray-50 border-b border-gray-200 mb-8">
+      <ul className="flex list-none m-0 p-0 gap-8 items-center">
         <li>
-          <Link to="/" style={logoStyle}>
+          <Link to="/" className="text-xl font-bold text-blue-600 no-underline mr-auto">
             Vite + React
           </Link>
         </li>
         <li>
           <Link 
             to="/" 
-            style={linkStyle(location.pathname === '/')}
+            className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
+              location.pathname === '/' 
+                ? 'text-blue-600 font-bold bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+            }`}
           >
             首页
           </Link>
@@ -64,7 +34,11 @@ const Navigation: React.FC = () => {
         <li>
           <Link 
             to="/about" 
-            style={linkStyle(location.pathname === '/about')}
+            className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
+              location.pathname === '/about' 
+                ? 'text-blue-600 font-bold bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+            }`}
           >
             关于
           </Link>
@@ -72,9 +46,25 @@ const Navigation: React.FC = () => {
         <li>
           <Link 
             to="/contact" 
-            style={linkStyle(location.pathname === '/contact')}
+            className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
+              location.pathname === '/contact' 
+                ? 'text-blue-600 font-bold bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+            }`}
           >
             联系
+          </Link>
+        </li>
+        <li>
+          <Link 
+            to="/unocss" 
+            className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
+              location.pathname === '/unocss' 
+                ? 'text-blue-600 font-bold bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+            }`}
+          >
+            UnoCSS
           </Link>
         </li>
       </ul>
