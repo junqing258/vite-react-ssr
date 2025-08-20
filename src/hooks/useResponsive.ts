@@ -16,32 +16,28 @@ export interface UseResponsiveOptions {
   enableWindowSizeTracking?: boolean;
 }
 
-export function useResponsive(options: UseResponsiveOptions = {}) {
+export function useResponsive() {
   const { deviceInfo } = useDevice();
-  const windowSize = useWindowSize(deviceInfo.defaultWidth);
-  const {
-    breakpoints = DEFAULT_BREAKPOINTS
-  } = options;
-
-
+  const { defaultWidth } = deviceInfo;
+  const windowSize = useWindowSize(defaultWidth);
 
   // 确保断点值存在
-  const mobileBreakpoint = breakpoints.mobile ?? DEFAULT_BREAKPOINTS.mobile;
-  const tabletBreakpoint = breakpoints.tablet ?? DEFAULT_BREAKPOINTS.tablet;
+  const mobileBreakpoint = DEFAULT_BREAKPOINTS.mobile;
+  const tabletBreakpoint = DEFAULT_BREAKPOINTS.tablet;
 
 
   // 基于当前窗口尺寸的直接计算（用于实时响应）
   const currentWidth = windowSize.width;
 
-  const [isMobile, setIsMobile] = useState(currentWidth <= mobileBreakpoint);
-  const [isTablet, setIsTablet] = useState(currentWidth > mobileBreakpoint && currentWidth <= tabletBreakpoint);
-  const [isDesktop, setIsDesktop] = useState(currentWidth > tabletBreakpoint);
+  const [isMobile, setIsMobile] = useState(defaultWidth <= mobileBreakpoint);
+  const [isTablet, setIsTablet] = useState(defaultWidth > mobileBreakpoint && defaultWidth <= tabletBreakpoint);
+  const [isDesktop, setIsDesktop] = useState(defaultWidth > tabletBreakpoint);
 
   useEffect(() => {
     setIsMobile(currentWidth <= mobileBreakpoint);
     setIsTablet(currentWidth > mobileBreakpoint && currentWidth <= tabletBreakpoint);
     setIsDesktop(currentWidth > tabletBreakpoint);
-  }, [currentWidth, mobileBreakpoint, tabletBreakpoint]);
+  }, [currentWidth]);
 
 
   const isMobileOrTablet = (isMobile || isTablet)

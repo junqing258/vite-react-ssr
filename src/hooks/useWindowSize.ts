@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { debounce } from 'lodash-es'
 
 export interface WindowSize {
   width: number;
@@ -13,7 +14,7 @@ export function useWindowSize(defaultWidth: number): WindowSize {
       return { width: defaultWidth || 1200, height: 800 };
     }
     return {
-      width: window.innerWidth,
+      width: defaultWidth || window.innerWidth,
       height: window.innerHeight,
     };
   });
@@ -24,12 +25,12 @@ export function useWindowSize(defaultWidth: number): WindowSize {
       return;
     }
 
-    function handleResize() {
+    const handleResize = debounce(() => {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
       });
-    }
+    }, 50);
 
     // 立即获取当前尺寸（处理水合时的差异）
     handleResize();
