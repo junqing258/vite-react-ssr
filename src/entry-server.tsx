@@ -27,7 +27,7 @@ export function render(url: string) {
           helmet.link.toString(),
           helmet.script.toString(),
           helmet.style.toString(),
-        ].join("");
+        ].join("\n");
 
         resolve({ html, head });
         callback();
