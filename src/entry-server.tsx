@@ -8,15 +8,20 @@ import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
 
-export function render({
-  url,
-  userAgent,
-}: {
-  url: string;
-  userAgent: string;
-}) {
+const getRoot = ({ url, userAgent }: { url: string; userAgent: string }) => {
   const deviceInfo = detectDevice(userAgent);
+  return (
+    <StrictMode>
+      <StaticRouter location={url}>
+        <DeviceProvider deviceInfo={deviceInfo}>
+          <App />
+        </DeviceProvider>
+      </StaticRouter>
+    </StrictMode>
+  );
+};
 
+export function render({ url, userAgent }: { url: string; userAgent: string }) {
   return new Promise<{ html: string; head: string }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
@@ -43,27 +48,18 @@ export function render({
       },
     });
 
-    const stream = renderToPipeableStream(
-      <StrictMode>
-        <StaticRouter location={url}>
-          <DeviceProvider deviceInfo={deviceInfo}>
-            <App />
-          </DeviceProvider>
-        </StaticRouter>
-      </StrictMode>,
-      {
-        onShellReady() {
-          // The content above all Suspense boundaries is ready
-          stream.pipe(writable);
-        },
-        onShellError(error: unknown) {
-          // Something errored before we could complete the shell
-          reject(error);
-        },
-        onError(error: unknown) {
-          console.error("SSR Error:", error);
-        },
-      }
-    );
+    const stream = renderToPipeableStream(getRoot({ url, userAgent }), {
+      onShellReady() {
+        // The content above all Suspense boundaries is ready
+        stream.pipe(writable);
+      },
+      onShellError(error: unknown) {
+        // Something errored before we could complete the shell
+        reject(error);
+      },
+      onError(error: unknown) {
+        console.error("SSR Error:", error);
+      },
+    });
   });
 }
