@@ -8,7 +8,12 @@ import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
 
-const getRoot = ({ url, userAgent }: { url: string; userAgent: string }) => {
+type Options = {
+  url: string;
+  userAgent: string;
+};
+
+const getRoot = ({ url, userAgent }: Options) => {
   const deviceInfo = detectDevice(userAgent);
   return (
     <StrictMode>
@@ -21,7 +26,7 @@ const getRoot = ({ url, userAgent }: { url: string; userAgent: string }) => {
   );
 };
 
-export function render({ url, userAgent }: { url: string; userAgent: string }) {
+export function render(opt: Options) {
   return new Promise<{ html: string; head: string }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
@@ -48,7 +53,7 @@ export function render({ url, userAgent }: { url: string; userAgent: string }) {
       },
     });
 
-    const stream = renderToPipeableStream(getRoot({ url, userAgent }), {
+    const stream = renderToPipeableStream(getRoot(opt), {
       onShellReady() {
         // The content above all Suspense boundaries is ready
         stream.pipe(writable);
