@@ -58,8 +58,6 @@ const Home: React.FC = () => {
             <div className="w-4 h-4 bg-green-500 rounded-full"></div>
           </div>
         </div>
-
-        <div className="mt-12 max-w-2xl mx-auto"></div>
       </div>
     </>
   );

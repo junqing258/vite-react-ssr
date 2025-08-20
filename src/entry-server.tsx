@@ -5,8 +5,12 @@ import { Writable } from "stream";
 import "virtual:uno.css";
 import { Helmet } from "react-helmet";
 import App from "./App";
+import { DeviceProvider } from "./components/DeviceContext";
+import { detectDevice } from "./utils/deviceDetection";
 
-export function render(url: string) {
+export function render(url: string, userAgent: string = '') {
+  const deviceInfo = detectDevice(userAgent);
+  
   return new Promise<{ html: string; head: string }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
@@ -36,7 +40,9 @@ export function render(url: string) {
     const stream = renderToPipeableStream(
       <StrictMode>
         <StaticRouter location={url}>
-          <App />
+          <DeviceProvider deviceInfo={deviceInfo}>
+            <App />
+          </DeviceProvider>
         </StaticRouter>
       </StrictMode>,
       {

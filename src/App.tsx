@@ -7,12 +7,12 @@ import { Suspense } from "react";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Navigation />
-      <main className="container mx-auto">
+      <main className="container mx-auto px-4 md:px-0">
         <Suspense fallback={<p>Loading...</p>}>{useRoutes(routes)}</Suspense>
       </main>
-    </div>
+    </>
   );
 }
 

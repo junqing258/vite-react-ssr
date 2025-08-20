@@ -51,7 +51,8 @@ app.use('*all', async (req, res) => {
       render = (await import('./dist/server/entry-server.js')).render
     }
 
-    const rendered = await render(url)
+    const userAgent = req.headers['user-agent'] || ''
+    const rendered = await render(url, userAgent)
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')

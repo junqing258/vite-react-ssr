@@ -10,7 +10,7 @@ export default defineConfig({
   presets: [
     presetUno({
       // 在 presetUno 中配置 reset
-      reset: 'tailwind', // 可选: 'normalize', 'eric-meyer', 'antfu', 'tailwind'
+      reset: 'normalize', // 可选: 'normalize', 'eric-meyer', 'antfu', 'tailwind'
     }),
     presetIcons({
       extraProperties: {
