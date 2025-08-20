@@ -25,7 +25,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="max-w-md mx-auto">
       <h1>联系我们</h1>
       <p>如果您有任何问题或建议，请随时与我们联系。</p>
 

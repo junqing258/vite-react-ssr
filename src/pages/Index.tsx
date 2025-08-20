@@ -30,7 +30,7 @@ const Home: React.FC = () => {
         <CounterExample />
       </div>
 
-      <div className="mt-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg  mx-auto">
+      <div className="mt-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg max-w-lg mx-auto">
         <h3 className="text-xl font-bold mb-2">🎉 UnoCSS 已启用!</h3>
         <p className="text-sm opacity-90">
           您现在可以使用原子化CSS类名进行快速开发
