@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Navigation />
-      <main>
+      <main className="container mx-auto">
         <Suspense fallback={<p>Loading...</p>}>{useRoutes(routes)}</Suspense>
       </main>
     </div>
