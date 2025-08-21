@@ -2,9 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import Pages from 'vite-plugin-pages'
 import UnoCSS from 'unocss/vite'
+import eruda from './build/plugins/vite-plugin-eruda'
 
 // https://vite.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
@@ -16,7 +17,8 @@ export default defineConfig(() => {
         ],
         extensions: ['tsx'],
       }),
-      UnoCSS()
+      UnoCSS(),
+      eruda({ debug: mode !== 'production' })
     ],
     ssr: {
       external: ['react', 'react-dom', 'react-router-dom']
