@@ -17,6 +17,18 @@ const addScript = () => {
   }
 };
 
+const getLoadingHtml = () => {
+  return `<div id="eruda-loading" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; color: #000; display: flex; justify-content: center; align-items: center; z-index: 9999;">Loading...</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const erudaLoading = document.getElementById('eruda-loading');
+      if (erudaLoading) {
+          erudaLoading.remove();
+      }
+    });
+  </script>`;
+};
+
 export default (
   {
     debug,
@@ -45,6 +57,7 @@ export default (
       ];
 
       if (debug) {
+        html = html.replace('</body>', getLoadingHtml() + '</body>');
         return {
           html,
           tags,
