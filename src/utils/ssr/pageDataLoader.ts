@@ -1,16 +1,8 @@
 import { createSSRContext, executegetInitialProps } from './ssrHelpers';
 import { PageComponent } from '../../types/ssr';
-// @ts-ignore
 import routes from "virtual:generated-pages-react";
 import React from 'react';
 
-// 页面路由到组件的映射
-/* const pageRoutes: Record<string, () => Promise<{ default: PageComponent }>> = {
-  '/': () => import('../../pages/Index'),
-  '/about': () => import('../../pages/About'),
-  '/contact': () => import('../../pages/Contact'),
-  '/unocss': () => import('../../pages/UnoCSS'),
-}; */
 
 type RouteItem = {
   path: string;
@@ -23,8 +15,6 @@ const pageRoutes: Record<string, () => Promise<{ default: PageComponent }>> = (r
   return acc;
 }, {} as Record<string, () => Promise<{ default: PageComponent }>>);
 
-
-console.log('pageRoutes ====================\n', pageRoutes, '\n====================')
 
 
 // 根据URL路径匹配页面组件
@@ -54,7 +44,6 @@ export async function getPageDataForSSR(options: {
       console.log(`No route found for ${pathname}`);
       return null;
     }
-    console.log('routeKey ====================\n', pageRoutes[routeKey].toString(), '\n====================')
 
     // 动态导入页面组件
     const pageModule = await pageRoutes[routeKey]?.();
