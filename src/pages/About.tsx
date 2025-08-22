@@ -5,7 +5,7 @@ import {
   getInitialPropsContext,
   getInitialPropsResult,
 } from "../types/ssr";
-import { fetchData } from "../utils/ssr/ssrHelpers";
+import { fetchData } from "../utils/fetchData";
 import { usePageData } from "../App";
 
 interface AboutProps {

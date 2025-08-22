@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { PageComponent, getInitialPropsContext, getInitialPropsResult } from "../types/ssr";
-import { fetchData } from "../utils/ssr/ssrHelpers";
+import { fetchData } from "../utils/fetchData";
 import { usePageData } from "../App";
 
 interface HomeProps {
