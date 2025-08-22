@@ -1,25 +1,40 @@
 import { createSSRContext, executegetInitialProps } from './ssrHelpers';
 import { PageComponent } from '../../types/ssr';
+// @ts-ignore
+import routes from "virtual:generated-pages-react";
+import React from 'react';
 
 // 页面路由到组件的映射
-const pageRoutes: Record<string, () => Promise<{ default: PageComponent }>> = {
+/* const pageRoutes: Record<string, () => Promise<{ default: PageComponent }>> = {
   '/': () => import('../../pages/Index'),
   '/about': () => import('../../pages/About'),
   '/contact': () => import('../../pages/Contact'),
   '/unocss': () => import('../../pages/UnoCSS'),
-  '/client-only': () => import('../../pages/ClientOnly'),
+}; */
+
+type RouteItem = {
+  path: string;
+  importName: string;
+  element: React.ReactElement<any>;
 };
+
+const pageRoutes: Record<string, () => Promise<{ default: PageComponent }>> = (routes as RouteItem[]).reduce((acc, route) => {
+  acc[normalizeName(route.path)] = (route.element.type as any)._payload?._result;
+  return acc;
+}, {} as Record<string, () => Promise<{ default: PageComponent }>>);
+
+
+console.log('pageRoutes ====================\n', pageRoutes, '\n====================')
+
 
 // 根据URL路径匹配页面组件
 function matchRoute(pathname: string): string | null {
+  pathname = normalizeName(pathname)
   // 精确匹配
   if (pageRoutes[pathname]) {
     return pathname;
   }
-  
-  // 这里可以添加更复杂的路由匹配逻辑
-  // 比如动态路由、通配符等
-  
+
   return null;
 }
 
@@ -32,40 +47,35 @@ export async function getPageDataForSSR(options: {
   try {
     const urlObj = new URL(options.url, 'http://localhost');
     const pathname = urlObj.pathname;
-    
+
     // 匹配路由
     const routeKey = matchRoute(pathname);
     if (!routeKey) {
       console.log(`No route found for ${pathname}`);
       return null;
     }
-    
+    console.log('routeKey ====================\n', pageRoutes[routeKey].toString(), '\n====================')
+
     // 动态导入页面组件
-    const pageModule = await pageRoutes[routeKey]();
-    const PageComponent = pageModule.default;
-    
+    const pageModule = await pageRoutes[routeKey]?.();
+    const PageComponent = pageModule?.default;
+
     // 检查是否有getInitialProps方法
-    if (!PageComponent.getInitialProps) {
+    if (!PageComponent?.getInitialProps) {
       console.log(`No getInitialProps found for ${routeKey}`);
       return null;
     }
 
-    // 特殊处理：对于/client-only路由，故意跳过服务端预加载，测试客户端回退
-    if (routeKey === '/client-only') {
-      console.log('Skipping SSR for /client-only route to test client fallback');
-      return null;
-    }
-    
     // 创建SSR上下文
     const context = createSSRContext(
       options.url,
       options.userAgent,
       options.headers || {}
     );
-    
+
     // 执行getInitialProps
     const result = await executegetInitialProps(PageComponent, context);
-    
+
     if (result) {
       // 检查重定向
       if (result.redirect) {
@@ -73,14 +83,14 @@ export async function getPageDataForSSR(options: {
           redirect: result.redirect
         };
       }
-      
+
       // 检查404
       if (result.notFound) {
         return {
           notFound: true
         };
       }
-      
+
       // 返回数据
       return {
         props: result.props,
@@ -88,7 +98,7 @@ export async function getPageDataForSSR(options: {
         route: routeKey
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error in getPageDataForSSR:', error);
@@ -103,25 +113,34 @@ export async function getPageDataForCSR(pathname: string) {
     if (!routeKey) {
       return null;
     }
-    
+
     const pageModule = await pageRoutes[routeKey]();
     const PageComponent = pageModule.default;
-    
+
     if (!PageComponent.getInitialProps) {
       return null;
     }
-    
+
     // 创建简化的上下文（客户端）
     const context = createSSRContext(
       window.location.href,
       navigator.userAgent,
       {}
     );
-    
+
     const result = await executegetInitialProps(PageComponent, context);
     return result;
   } catch (error) {
     console.error('Error in getPageDataForCSR:', error);
     return null;
   }
+}
+
+
+
+export function normalizeName(name: string) {
+  if (!name.startsWith('/')) {
+    name = '/' + name
+  }
+  return name.toLocaleLowerCase()
 }

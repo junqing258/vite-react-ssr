@@ -1,8 +1,11 @@
-
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { PageComponent, getInitialPropsContext, getInitialPropsResult } from "../types/ssr";
-import { fetchData } from "../utils/ssr-data/ssrHelpers";
+import {
+  PageComponent,
+  getInitialPropsContext,
+  getInitialPropsResult,
+} from "../types/ssr";
+import { fetchData } from "../utils/ssr/ssrHelpers";
 import { usePageData } from "../App";
 
 interface AboutProps {
@@ -78,33 +81,37 @@ const About: PageComponent<AboutProps> = () => {
             <h2>最新文章</h2>
             <div style={{ display: "grid", gap: "1rem", marginTop: "1rem" }}>
               {posts.map((post: any) => (
-                <div 
+                <div
                   key={post.id}
                   style={{
                     padding: "1rem",
                     border: "1px solid #e5e5e5",
                     borderRadius: "8px",
-                    backgroundColor: "#f9f9f9"
+                    backgroundColor: "#f9f9f9",
                   }}
                 >
                   <h3 style={{ margin: "0 0 0.5rem 0", color: "#333" }}>
                     {post.title}
                   </h3>
-                  <p style={{ 
-                    margin: "0 0 0.5rem 0", 
-                    color: "#666", 
-                    fontSize: "0.9rem",
-                    lineHeight: "1.4"
-                  }}>
+                  <p
+                    style={{
+                      margin: "0 0 0.5rem 0",
+                      color: "#666",
+                      fontSize: "0.9rem",
+                      lineHeight: "1.4",
+                    }}
+                  >
                     {post.content.substring(0, 100)}...
                   </p>
-                  <div style={{ 
-                    display: "flex", 
-                    justifyContent: "space-between", 
-                    alignItems: "center",
-                    fontSize: "0.8rem",
-                    color: "#888"
-                  }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      fontSize: "0.8rem",
+                      color: "#888",
+                    }}
+                  >
                     <span>作者: {post.author}</span>
                     <span>{post.publishDate}</span>
                   </div>
@@ -119,7 +126,7 @@ const About: PageComponent<AboutProps> = () => {
                           backgroundColor: "#646cff",
                           color: "white",
                           borderRadius: "4px",
-                          fontSize: "0.7rem"
+                          fontSize: "0.7rem",
                         }}
                       >
                         {tag}
@@ -143,10 +150,12 @@ const About: PageComponent<AboutProps> = () => {
 };
 
 // 添加getInitialProps静态方法
-About.getInitialProps = async (_context: getInitialPropsContext): Promise<getInitialPropsResult<AboutProps>> => {
+About.getInitialProps = async (
+  _context: getInitialPropsContext
+): Promise<getInitialPropsResult<AboutProps>> => {
   try {
     // 获取文章数据
-    const posts = await fetchData('/api/posts');
+    const posts = await fetchData("/api/posts");
 
     return {
       props: {
@@ -156,8 +165,8 @@ About.getInitialProps = async (_context: getInitialPropsContext): Promise<getIni
       revalidate: 1800,
     };
   } catch (error) {
-    console.error('Error in About.getInitialProps:', error);
-    
+    console.error("Error in About.getInitialProps:", error);
+
     // 发生错误时返回空的props
     return {
       props: {},

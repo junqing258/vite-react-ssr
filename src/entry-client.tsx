@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
-import { createInitialPageData } from "./utils/ssr-data/clientDataHydration";
+import { createInitialPageData } from "./utils/ssr/clientDataHydration";
 
 const deviceInfo = detectDevice(window.navigator.userAgent);
 const initialPageData = createInitialPageData();

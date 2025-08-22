@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
-import { getPageDataForSSR } from "./utils/ssr-data/pageDataLoader";
+import { getPageDataForSSR } from "./utils/ssr/pageDataLoader";
 
 type Options = {
   url: string;

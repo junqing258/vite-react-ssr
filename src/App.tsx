@@ -4,7 +4,7 @@ import routes from "virtual:generated-pages-react";
 import { useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { Suspense, createContext, useContext } from "react";
-import { usePageDataWithFallback } from "./utils/ssr-data/clientDataHydration";
+import { usePageDataWithFallback } from "./utils/ssr/clientDataHydration";
 
 // 创建页面数据上下文
 export const PageDataContext = createContext<any>(null);
