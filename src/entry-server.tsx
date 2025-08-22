@@ -7,27 +7,32 @@ import { Helmet } from "react-helmet";
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
+import { getPageDataForSSR } from "./utils/ssr-data/pageDataLoader";
 
 type Options = {
   url: string;
   userAgent: string;
+  headers?: Record<string, string>;
 };
 
-const getRoot = ({ url, userAgent }: Options) => {
+const getRoot = ({ url, userAgent }: Options, pageData?: any) => {
   const deviceInfo = detectDevice(userAgent);
   return (
     <StrictMode>
       <StaticRouter location={url}>
         <DeviceProvider deviceInfo={deviceInfo}>
-          <App />
+          <App pageData={pageData} />
         </DeviceProvider>
       </StaticRouter>
     </StrictMode>
   );
 };
 
-export function render(opt: Options) {
-  return new Promise<{ html: string; head: string }>((resolve, reject) => {
+export async function render(opt: Options) {
+  // 预加载页面数据
+  const pageData = await getPageDataForSSR(opt);
+
+  return new Promise<{ html: string; head: string; pageData?: any }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
     const writable = new Writable({
@@ -48,12 +53,12 @@ export function render(opt: Options) {
           helmet.style.toString(),
         ].join("\n");
 
-        resolve({ html, head });
+        resolve({ html, head, pageData });
         callback();
       },
     });
 
-    const stream = renderToPipeableStream(getRoot(opt), {
+    const stream = renderToPipeableStream(getRoot(opt, pageData), {
       onShellReady() {
         // The content above all Suspense boundaries is ready
         stream.pipe(writable);

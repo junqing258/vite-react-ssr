@@ -52,12 +52,29 @@ app.use('*all', async (req, res) => {
     }
 
     const userAgent = req.headers['user-agent'] || ''
-    // const cookie = req.headers['cookie'] || ''
-    const rendered = await render({ url, userAgent })
+    const headers = req.headers
+    const rendered = await render({ url, userAgent, headers })
+
+    // 处理重定向
+    if (rendered.pageData?.redirect) {
+      const statusCode = rendered.pageData.redirect.permanent ? 301 : 302;
+      return res.redirect(statusCode, rendered.pageData.redirect.destination);
+    }
+
+    // 处理404
+    if (rendered.pageData?.notFound) {
+      return res.status(404).send('Page not found');
+    }
+
+    // 注入页面数据到HTML
+    const pageDataScript = rendered.pageData 
+      ? `<script>window.__PAGE_DATA__ = ${JSON.stringify(rendered.pageData)}</script>`
+      : '';
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')
       .replace(`<!--app-html-->`, rendered.html ?? '')
+      .replace(`</head>`, `${pageDataScript}</head>`)
 
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
   } catch (e) {

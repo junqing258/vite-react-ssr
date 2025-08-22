@@ -71,6 +71,18 @@ const NavigationDesktop: React.FC = () => {
             UnoCSS
           </Link>
         </li>
+        <li>
+          <Link
+            to="/client-only"
+            className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
+              location.pathname === "/client-only"
+                ? "text-blue-600 font-bold bg-blue-50"
+                : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+            }`}
+          >
+            客户端
+          </Link>
+        </li>
       </ul>
     </nav>
   );

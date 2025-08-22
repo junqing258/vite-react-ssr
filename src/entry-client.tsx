@@ -6,15 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
+import { createInitialPageData } from "./utils/ssr-data/clientDataHydration";
 
 const deviceInfo = detectDevice(window.navigator.userAgent);
+const initialPageData = createInitialPageData();
 
 hydrateRoot(
   document.getElementById("root") as HTMLElement,
   <StrictMode>
     <BrowserRouter>
       <DeviceProvider deviceInfo={deviceInfo}>
-        <App />
+        <App pageData={initialPageData} />
       </DeviceProvider>
     </BrowserRouter>
   </StrictMode>

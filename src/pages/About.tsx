@@ -1,8 +1,24 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { PageComponent, getInitialPropsContext, getInitialPropsResult } from "../types/ssr";
+import { fetchData } from "../utils/ssr-data/ssrHelpers";
+import { usePageData } from "../App";
 
-const About: React.FC = () => {
+interface AboutProps {
+  posts?: Array<{
+    id: number;
+    title: string;
+    content: string;
+    author: string;
+    publishDate: string;
+    tags: string[];
+  }>;
+}
+
+const About: PageComponent<AboutProps> = () => {
+  const pageData = usePageData();
+  const { posts } = pageData?.props || {};
   return (
     <>
       <Helmet>
@@ -57,6 +73,65 @@ const About: React.FC = () => {
           <li>TypeScript 支持</li>
         </ul>
 
+        {posts && posts.length > 0 && (
+          <div style={{ marginTop: "2rem" }}>
+            <h2>最新文章</h2>
+            <div style={{ display: "grid", gap: "1rem", marginTop: "1rem" }}>
+              {posts.map((post: any) => (
+                <div 
+                  key={post.id}
+                  style={{
+                    padding: "1rem",
+                    border: "1px solid #e5e5e5",
+                    borderRadius: "8px",
+                    backgroundColor: "#f9f9f9"
+                  }}
+                >
+                  <h3 style={{ margin: "0 0 0.5rem 0", color: "#333" }}>
+                    {post.title}
+                  </h3>
+                  <p style={{ 
+                    margin: "0 0 0.5rem 0", 
+                    color: "#666", 
+                    fontSize: "0.9rem",
+                    lineHeight: "1.4"
+                  }}>
+                    {post.content.substring(0, 100)}...
+                  </p>
+                  <div style={{ 
+                    display: "flex", 
+                    justifyContent: "space-between", 
+                    alignItems: "center",
+                    fontSize: "0.8rem",
+                    color: "#888"
+                  }}>
+                    <span>作者: {post.author}</span>
+                    <span>{post.publishDate}</span>
+                  </div>
+                  <div style={{ marginTop: "0.5rem" }}>
+                    {post.tags.map((tag: string) => (
+                      <span
+                        key={tag}
+                        style={{
+                          display: "inline-block",
+                          padding: "2px 6px",
+                          margin: "0 4px 4px 0",
+                          backgroundColor: "#646cff",
+                          color: "white",
+                          borderRadius: "4px",
+                          fontSize: "0.7rem"
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style={{ marginTop: "2rem" }}>
           <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
             ← 返回首页
@@ -65,6 +140,29 @@ const About: React.FC = () => {
       </div>
     </>
   );
+};
+
+// 添加getInitialProps静态方法
+About.getInitialProps = async (_context: getInitialPropsContext): Promise<getInitialPropsResult<AboutProps>> => {
+  try {
+    // 获取文章数据
+    const posts = await fetchData('/api/posts');
+
+    return {
+      props: {
+        posts,
+      },
+      // 每30分钟重新验证一次
+      revalidate: 1800,
+    };
+  } catch (error) {
+    console.error('Error in About.getInitialProps:', error);
+    
+    // 发生错误时返回空的props
+    return {
+      props: {},
+    };
+  }
 };
 
 export default About;

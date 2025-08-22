@@ -1,8 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { PageComponent, getInitialPropsContext, getInitialPropsResult } from "../types/ssr";
+import { usePageData } from "../App";
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  contactInfo?: {
+    email: string;
+    phone: string;
+    address: string;
+    workingHours: string;
+  };
+}
+
+const Contact: PageComponent<ContactProps> = () => {
+  const pageData = usePageData();
+  const { contactInfo } = pageData?.props || {};
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -44,6 +57,24 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-4 md:px-0">
         <h1>联系我们</h1>
         <p>如果您有任何问题或建议，请随时与我们联系。</p>
+
+        {contactInfo && (
+          <div style={{ 
+            marginTop: "2rem", 
+            padding: "1.5rem", 
+            backgroundColor: "#f0f0f0", 
+            borderRadius: "8px",
+            marginBottom: "2rem"
+          }}>
+            <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>联系信息</h2>
+            <div style={{ display: "grid", gap: "0.5rem" }}>
+              <p><strong>邮箱:</strong> {contactInfo.email}</p>
+              <p><strong>电话:</strong> {contactInfo.phone}</p>
+              <p><strong>地址:</strong> {contactInfo.address}</p>
+              <p><strong>工作时间:</strong> {contactInfo.workingHours}</p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ marginTop: "2rem" }}>
           <div style={{ marginBottom: "1rem" }}>
@@ -143,6 +174,35 @@ const Contact: React.FC = () => {
       </div>
     </>
   );
+};
+
+// 添加getInitialProps静态方法
+Contact.getInitialProps = async (_context: getInitialPropsContext): Promise<getInitialPropsResult<ContactProps>> => {
+  try {
+    // 模拟获取联系信息
+    await new Promise(resolve => setTimeout(resolve, 50)); // 模拟API延迟
+    
+    const contactInfo = {
+      email: "support@example.com",
+      phone: "+86 400-123-4567",
+      address: "北京市朝阳区xxx街道xxx号",
+      workingHours: "周一至周五 9:00-18:00"
+    };
+
+    return {
+      props: {
+        contactInfo,
+      },
+      // 24小时重新验证一次
+      revalidate: 86400,
+    };
+  } catch (error) {
+    console.error('Error in Contact.getInitialProps:', error);
+    
+    return {
+      props: {},
+    };
+  }
 };
 
 export default Contact;
