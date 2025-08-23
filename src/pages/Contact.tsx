@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { PageComponent, getInitialPropsContext, getInitialPropsResult } from "../types/ssr";
+import {
+  PageComponent,
+  getInitialPropsContext,
+  getInitialPropsResult,
+} from "../types/ssr";
 import { usePageData } from "../App";
 
 interface ContactProps {
@@ -59,19 +63,29 @@ const Contact: PageComponent<ContactProps> = () => {
         <p>如果您有任何问题或建议，请随时与我们联系。</p>
 
         {contactInfo && (
-          <div style={{ 
-            marginTop: "2rem", 
-            padding: "1.5rem", 
-            backgroundColor: "#f0f0f0", 
-            borderRadius: "8px",
-            marginBottom: "2rem"
-          }}>
+          <div
+            style={{
+              marginTop: "2rem",
+              padding: "1.5rem",
+              backgroundColor: "#f0f0f0",
+              borderRadius: "8px",
+              marginBottom: "2rem",
+            }}
+          >
             <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>联系信息</h2>
             <div style={{ display: "grid", gap: "0.5rem" }}>
-              <p><strong>邮箱:</strong> {contactInfo.email}</p>
-              <p><strong>电话:</strong> {contactInfo.phone}</p>
-              <p><strong>地址:</strong> {contactInfo.address}</p>
-              <p><strong>工作时间:</strong> {contactInfo.workingHours}</p>
+              <p>
+                <strong>邮箱:</strong> {contactInfo.email}
+              </p>
+              <p>
+                <strong>电话:</strong> {contactInfo.phone}
+              </p>
+              <p>
+                <strong>地址:</strong> {contactInfo.address}
+              </p>
+              <p>
+                <strong>工作时间:</strong> {contactInfo.workingHours}
+              </p>
             </div>
           </div>
         )}
@@ -177,16 +191,18 @@ const Contact: PageComponent<ContactProps> = () => {
 };
 
 // 添加getInitialProps静态方法
-Contact.getInitialProps = async (_context: getInitialPropsContext): Promise<getInitialPropsResult<ContactProps>> => {
+Contact.getInitialProps = async (
+  _context: getInitialPropsContext
+): Promise<getInitialPropsResult<ContactProps>> => {
   try {
     // 模拟获取联系信息
-    await new Promise(resolve => setTimeout(resolve, 50)); // 模拟API延迟
-    
+    await new Promise((resolve) => setTimeout(resolve, 50)); // 模拟API延迟
+
     const contactInfo = {
       email: "support@example.com",
       phone: "+86 400-123-4567",
       address: "北京市朝阳区xxx街道xxx号",
-      workingHours: "周一至周五 9:00-18:00"
+      workingHours: "周一至周五 9:00-18:00",
     };
 
     return {
@@ -197,8 +213,8 @@ Contact.getInitialProps = async (_context: getInitialPropsContext): Promise<getI
       revalidate: 86400,
     };
   } catch (error) {
-    console.error('Error in Contact.getInitialProps:', error);
-    
+    console.error("Error in Contact.getInitialProps:", error);
+
     return {
       props: {},
     };

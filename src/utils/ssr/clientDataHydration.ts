@@ -135,12 +135,14 @@ export function useClientPageData() {
 // 创建页面数据提供者的初始状态
 export function createInitialPageData() {
   const serverData = getServerData();
-  
+
   if (serverData) {
     // 如果有服务器端数据，清理全局变量并返回
     clearServerData();
     return serverData;
   }
+
+
   
   // 如果没有服务器端数据，返回null，让客户端Hook处理
   return null;

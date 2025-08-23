@@ -20,8 +20,9 @@ interface AppProps {
 
 // 智能数据管理组件
 function AppWithDataFallback({ initialPageData }: { initialPageData?: any }) {
-  const { pageData, loading, error, isClientGenerated } = usePageDataWithFallback();
-  
+  const { pageData, loading, error, isClientGenerated } =
+    usePageDataWithFallback();
+
   // 使用初始数据或从Hook获取的数据
   const finalPageData = initialPageData || pageData;
 
@@ -42,8 +43,8 @@ function AppWithDataFallback({ initialPageData }: { initialPageData?: any }) {
         <Navigation />
         <div className="container mx-auto px-4 py-8 text-center">
           <p className="text-red-500">加载数据失败: {error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             重试
@@ -58,9 +59,9 @@ function AppWithDataFallback({ initialPageData }: { initialPageData?: any }) {
       <Navigation />
       <Suspense fallback={<p>Loading...</p>}>{useRoutes(routes)}</Suspense>
       {/* 开发环境显示数据来源 */}
-      {process.env.NODE_ENV === 'development' && finalPageData && (
+      {process.env.NODE_ENV === "development" && finalPageData && (
         <div className="fixed bottom-4 right-4 text-xs bg-gray-800 text-white px-2 py-1 rounded">
-          数据来源: {isClientGenerated ? '客户端' : '服务端'}
+          数据来源: {isClientGenerated ? "客户端" : "服务端"}
         </div>
       )}
     </PageDataContext.Provider>

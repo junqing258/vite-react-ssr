@@ -100,6 +100,7 @@ export async function getPageDataForCSR(pathname: string) {
   try {
     const routeKey = matchRoute(pathname);
     if (!routeKey) {
+      console.warn(`No route found for ${pathname}`);
       return null;
     }
 
