@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
@@ -18,8 +18,18 @@ interface ContactProps {
 }
 
 const Contact: PageComponent<ContactProps> = () => {
-  const pageData = usePageData();
-  const { contactInfo } = pageData?.props || {};
+  const pageData = usePageData() as { props: ContactProps };
+  const [contactInfo, setContactInfo] = useState<ContactProps["contactInfo"]>(
+    pageData?.props?.contactInfo
+  );
+
+  if (typeof window !== "undefined" && !contactInfo) {
+    getInitialProps({}).then((res) => {
+      console.log("res", res);
+      setContactInfo(res.props.contactInfo);
+    });
+  }
+
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -191,9 +201,9 @@ const Contact: PageComponent<ContactProps> = () => {
 };
 
 // 添加getInitialProps静态方法
-Contact.getInitialProps = async (
+async function getInitialProps(
   _context: getInitialPropsContext
-): Promise<getInitialPropsResult<ContactProps>> => {
+): Promise<getInitialPropsResult<ContactProps>> {
   try {
     // 模拟获取联系信息
     await new Promise((resolve) => setTimeout(resolve, 50)); // 模拟API延迟
@@ -219,6 +229,8 @@ Contact.getInitialProps = async (
       props: {},
     };
   }
-};
+}
+
+Contact.getInitialProps = getInitialProps;
 
 export default Contact;

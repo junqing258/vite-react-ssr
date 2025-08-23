@@ -7,7 +7,7 @@ import { Suspense, createContext, useContext } from "react";
 import { usePageDataWithFallback } from "./utils/ssr/clientDataHydration";
 
 // 创建页面数据上下文
-export const PageDataContext = createContext<any>(null);
+export const PageDataContext = createContext<Record<string, any> | null>(null);
 
 // 自定义Hook用于访问页面数据
 export const usePageData = () => {
@@ -20,7 +20,7 @@ interface AppProps {
 
 // 智能数据管理组件
 function AppWithDataFallback({ initialPageData }: { initialPageData?: any }) {
-  const { pageData, loading, error, isClientGenerated } =
+  const { pageData, loading, error, refetch, isClientGenerated } =
     usePageDataWithFallback();
 
   // 使用初始数据或从Hook获取的数据

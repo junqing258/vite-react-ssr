@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
@@ -26,7 +26,18 @@ interface HomeProps {
 
 const Home: PageComponent<HomeProps> = () => {
   const pageData = usePageData() as { props: HomeProps };
-  const { config, user } = pageData?.props || {};
+  const [config, setConfig] = useState<HomeProps["config"]>(
+    pageData?.props?.config
+  );
+  const [user, setUser] = useState<HomeProps["user"]>(pageData?.props?.user);
+
+  if (typeof window !== "undefined" && !config) {
+    getInitialProps({}).then((res) => {
+      setConfig(res.props.config);
+      setUser(res.props.user);
+    });
+  }
+
   return (
     <div className="container mx-auto px-4 md:px-0">
       <Helmet>
@@ -159,9 +170,9 @@ const CounterExample: React.FC = () => {
 };
 
 // 添加getInitialProps静态方法
-Home.getInitialProps = async (
+async function getInitialProps(
   _context: getInitialPropsContext
-): Promise<getInitialPropsResult<HomeProps>> => {
+): Promise<getInitialPropsResult<HomeProps>> {
   try {
     // 并发获取数据
     const [config, user] = await Promise.all([
@@ -192,6 +203,8 @@ Home.getInitialProps = async (
       },
     };
   }
-};
+}
+
+Home.getInitialProps = getInitialProps;
 
 export default Home;
