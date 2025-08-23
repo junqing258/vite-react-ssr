@@ -57,7 +57,7 @@ export default (
       ];
 
       if (debug) {
-        html = html.replace('</body>', getLoadingHtml() + '</body>');
+        // html = html.replace('</body>', getLoadingHtml() + '</body>');
         return {
           html,
           tags,

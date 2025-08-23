@@ -1,0 +1,42 @@
+<!-- 这是一个 SVG 格式的 Open Graph 图片，可以作为默认的社交媒体分享图片 -->
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="100" cy="100" r="50" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="1100" cy="530" r="80" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="200" cy="500" r="30" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="1000" cy="150" r="40" fill="rgba(255,255,255,0.1)"/>
+  
+  <!-- 主标题 -->
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white" text-anchor="middle">
+    Vite React SSR
+  </text>
+  
+  <!-- 副标题 -->
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)" text-anchor="middle">
+    多语言支持 • 服务端渲染 • 现代化架构
+  </text>
+  
+  <!-- 技术标签 -->
+  <rect x="400" y="420" width="80" height="40" rx="20" fill="rgba(255,255,255,0.2)"/>
+  <text x="440" y="445" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">React</text>
+  
+  <rect x="500" y="420" width="80" height="40" rx="20" fill="rgba(255,255,255,0.2)"/>
+  <text x="540" y="445" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">TypeScript</text>
+  
+  <rect x="600" y="420" width="60" height="40" rx="20" fill="rgba(255,255,255,0.2)"/>
+  <text x="630" y="445" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">Vite</text>
+  
+  <rect x="680" y="420" width="80" height="40" rx="20" fill="rgba(255,255,255,0.2)"/>
+  <text x="720" y="445" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">i18n</text>
+</svg>

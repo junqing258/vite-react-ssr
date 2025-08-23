@@ -1,0 +1,24 @@
+{
+  "title": "联系我们 - Vite React SSR",
+  "description": "联系我们的团队获取更多信息",
+  "heading": "联系我们",
+  "form": {
+    "name": "姓名",
+    "namePlaceholder": "请输入您的姓名",
+    "email": "邮箱",
+    "emailPlaceholder": "请输入您的邮箱",
+    "message": "消息",
+    "messagePlaceholder": "请输入您想说的话",
+    "submit": "发送消息",
+    "submitting": "发送中...",
+    "success": "消息发送成功！",
+    "error": "发送失败，请重试。"
+  },
+  "info": {
+    "title": "联系信息",
+    "address": "地址",
+    "phone": "电话",
+    "email": "邮箱",
+    "workingHours": "工作时间：周一至周五 9:00-18:00"
+  }
+}

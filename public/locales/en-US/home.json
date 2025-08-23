@@ -1,0 +1,28 @@
+{
+  "title": "Home - Vite React SSR",
+  "description": "Welcome to our homepage, a modern web application built with Vite + React + React Router + UnoCSS",
+  "keywords": "Vite, React, SSR, UnoCSS, TypeScript",
+  "heading": "Welcome to Homepage",
+  "subtitle": "A modern web application built with Vite + React + React Router + UnoCSS",
+  "counter": {
+    "title": "Counter Demo",
+    "current": "Current Count",
+    "increment": "Increment",
+    "decrement": "Decrement",
+    "reset": "Reset"
+  },
+  "features": {
+    "title": "Key Features",
+    "ssr": "Server-side Rendering",
+    "typescript": "TypeScript Support",
+    "unocss": "Atomic CSS",
+    "responsive": "Responsive Design",
+    "darkMode": "Dark Mode",
+    "i18n": "Internationalization"
+  },
+  "links": {
+    "learnMore": "Learn More",
+    "documentation": "View Documentation",
+    "github": "GitHub Repository"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "首页 - Vite React SSR",
+  "description": "欢迎来到我们的首页，这是一个使用 Vite + React + React Router + UnoCSS 的应用",
+  "keywords": "Vite, React, SSR, UnoCSS, TypeScript",
+  "heading": "欢迎来到首页",
+  "subtitle": "这是一个使用 Vite + React + React Router + UnoCSS 的应用",
+  "counter": {
+    "title": "计数器演示",
+    "current": "当前计数",
+    "increment": "增加",
+    "decrement": "减少",
+    "reset": "重置"
+  },
+  "features": {
+    "title": "主要特性",
+    "ssr": "服务端渲染",
+    "typescript": "TypeScript 支持",
+    "unocss": "原子化 CSS",
+    "responsive": "响应式设计",
+    "darkMode": "深色模式",
+    "i18n": "国际化支持"
+  },
+  "links": {
+    "learnMore": "了解更多",
+    "documentation": "查看文档",
+    "github": "GitHub 仓库"
+  }
+}

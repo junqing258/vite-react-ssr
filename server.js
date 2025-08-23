@@ -32,6 +32,70 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }))
 }
 
+// 判断开发环境，设置合适的 base URL
+const baseUrl = isProduction 
+  ? (process.env.SITE_URL || 'https://example.com')
+  : `http://localhost:${port}`;
+
+// SEO 路由支持（仅开发环境中的简单实现）
+if (!isProduction) {
+  // 静态资源处理 - 处理 i18n 翻译文件
+  app.use('/locales', express.static('public/locales'));
+  
+  // 开发环境简单实现 sitemap 和 robots
+  app.get('/sitemap.xml', (req, res) => {
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="${baseUrl}/" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${baseUrl}/en-US/" />
+  </url>
+  <url>
+    <loc>${baseUrl}/about</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="${baseUrl}/about" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${baseUrl}/en-US/about" />
+  </url>
+  <url>
+    <loc>${baseUrl}/contact</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="${baseUrl}/contact" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${baseUrl}/en-US/contact" />
+  </url>
+</urlset>`;
+    res.set('Content-Type', 'text/xml');
+    res.send(sitemap);
+  });
+
+  app.get('/robots.txt', (req, res) => {
+    const robots = `User-agent: *
+Allow: /
+
+Sitemap: ${baseUrl}/sitemap.xml
+
+Disallow: /admin/
+Disallow: /api/
+Allow: /zh-CN/
+Allow: /en-US/
+Allow: /locales/`;
+    res.set('Content-Type', 'text/plain');
+    res.send(robots);
+  });
+} else {
+  // 生产环境使用完整的中间件
+  try {
+    const { languageMiddleware } = await import('./dist/server/middleware/languageMiddleware.js')
+    const { setupSEORoutes } = await import('./dist/server/utils/seoUtils.js')
+    app.use(languageMiddleware)
+    setupSEORoutes(app, baseUrl)
+  } catch (e) {
+    console.log('SEO utilities not available in production build')
+  }
+}
+
 // Serve HTML
 app.use('*all', async (req, res) => {
   try {

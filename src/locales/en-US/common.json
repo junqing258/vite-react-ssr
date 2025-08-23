@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "unocss": "UnoCSS Demo"
+  },
+  "theme": {
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "toggle": "Toggle Theme"
+  },
+  "language": {
+    "switch": "Switch Language",
+    "zh-CN": "中文",
+    "en-US": "English"
+  },
+  "user": {
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "welcome": "Welcome, {{name}}!"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

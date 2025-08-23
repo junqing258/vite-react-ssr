@@ -1,0 +1,18 @@
+{
+  "title": "About Us - Vite React SSR",
+  "description": "Learn about our team and project background",
+  "heading": "About Us",
+  "content": {
+    "intro": "We are a team focused on modern web development technologies.",
+    "mission": "Our mission is to create high-performance, user-friendly web applications.",
+    "technology": "We use the latest technology stack, including React, TypeScript, Vite, and more."
+  },
+  "team": {
+    "title": "Our Team",
+    "members": {
+      "developer": "Developer",
+      "designer": "Designer",
+      "manager": "Project Manager"
+    }
+  }
+}

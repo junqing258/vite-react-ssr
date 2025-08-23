@@ -1,6 +1,7 @@
 // Store 统一导出文件
 export { useCounterStore } from './counterStore';
 export { useThemeStore } from './themeStore';
+export { useLanguageStore } from './languageStore';
 
 // Store 工具函数导出
 export * from './utils';

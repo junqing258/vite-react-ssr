@@ -1,0 +1,18 @@
+{
+  "title": "关于我们 - Vite React SSR",
+  "description": "了解我们的团队和项目背景",
+  "heading": "关于我们",
+  "content": {
+    "intro": "我们是一个专注于现代 Web 开发技术的团队。",
+    "mission": "我们的使命是创建高性能、用户友好的 Web 应用程序。",
+    "technology": "我们使用最新的技术栈，包括 React、TypeScript、Vite 等。"
+  },
+  "team": {
+    "title": "我们的团队",
+    "members": {
+      "developer": "开发者",
+      "designer": "设计师",
+      "manager": "项目经理"
+    }
+  }
+}

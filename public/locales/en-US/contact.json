@@ -1,0 +1,24 @@
+{
+  "title": "Contact Us - Vite React SSR",
+  "description": "Get in touch with our team for more information",
+  "heading": "Contact Us",
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "message": "Message",
+    "messagePlaceholder": "Enter your message",
+    "submit": "Send Message",
+    "submitting": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Failed to send message, please try again."
+  },
+  "info": {
+    "title": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours: Monday - Friday 9:00-18:00"
+  }
+}

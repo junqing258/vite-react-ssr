@@ -1,4 +1,5 @@
 import "./App.scss";
+import "./i18n"; // 导入 i18n 配置
 import routes from "virtual:generated-pages-react";
 import { useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation";
@@ -18,6 +19,7 @@ function App({ pageData }: AppProps) {
   // 初始化主题
   useThemeInit();
   const userStore = useRef(createUserStore(get(pageData, "user"))).current;
+  
   return (
     <PageContext.Provider value={pageData}>
       <UserContext.Provider value={userStore}>
