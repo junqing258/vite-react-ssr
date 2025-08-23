@@ -3,10 +3,12 @@ import routes from "virtual:generated-pages-react";
 import { useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { useThemeInit } from "./hooks/useStore";
-import { createContext } from "react";
+import { useRef } from "react";
+import { createUserStore } from "./store/userStore";
+import { get } from "lodash-es";
+import { PageContext, UserContext } from "./components/Contexts";
 
 // 创建页面数据上下文
-export const PageContext = createContext<Record<string, any> | null>(null);
 
 interface AppProps {
   pageData?: any;
@@ -15,11 +17,13 @@ interface AppProps {
 function App({ pageData }: AppProps) {
   // 初始化主题
   useThemeInit();
-
+  const userStore = useRef(createUserStore(get(pageData, "user"))).current;
   return (
     <PageContext.Provider value={pageData}>
-      <Navigation />
-      <div>{useRoutes(routes)}</div>
+      <UserContext.Provider value={userStore}>
+        <Navigation />
+        <div>{useRoutes(routes)}</div>
+      </UserContext.Provider>
     </PageContext.Provider>
   );
 }

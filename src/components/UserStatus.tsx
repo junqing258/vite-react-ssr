@@ -1,14 +1,17 @@
-import { useUserStore } from "../store/userStore";
+// import { useUserStore } from "../store/userStore2";
+
+import { useUserContext } from "../hooks/useStore";
 
 // 用户状态组件
 const UserStatus: React.FC = () => {
-  const { id: userId, name, email, login, logout } = useUserStore();
+  const { id: userId, name, email, login, logout } = useUserContext((s) => s);
 
   const handleLogin = () => {
     login({
       id: "1",
       name: "张三",
       email: "zhangsan@example.com",
+      isLoggedIn: true,
     });
   };
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { useCounterStore, useUserStore } from "../store";
+import { useCounterStore } from "../store";
+import { useUserContext } from "../hooks/useStore";
 
 const Home: React.FC = () => {
   return (
@@ -53,7 +54,7 @@ const Home: React.FC = () => {
           </h2>
           <CounterExample />
         </div>
-        
+
         <div className="mt-8 p-8 border border-gray-200 rounded-lg bg-white max-w-md mx-auto">
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">
             用户状态示例
@@ -103,21 +104,20 @@ const CounterExample: React.FC = () => {
           +1
         </button>
       </div>
-      <p className="text-sm text-gray-600">
-        这个计数器使用 Zustand 状态管理
-      </p>
+      <p className="text-sm text-gray-600">这个计数器使用 Zustand 状态管理</p>
     </div>
   );
 };
 
 const UserStatusExample: React.FC = () => {
-  const { id: userId, name, login, logout } = useUserStore();
+  const { id: userId, name, email, login, logout } = useUserContext((s) => s);
 
   const handleLogin = () => {
     login({
       id: "1",
       name: "演示用户",
-      email: 'demo@example.com',
+      email: "demo@example.com",
+      isLoggedIn: true,
     });
   };
 
@@ -145,9 +145,7 @@ const UserStatusExample: React.FC = () => {
           </button>
         </div>
       )}
-      <p className="text-sm text-gray-600">
-        用户状态会自动持久化到本地存储
-      </p>
+      <p className="text-sm text-gray-600">用户状态会自动持久化到本地存储</p>
     </div>
   );
 };

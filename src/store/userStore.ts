@@ -1,54 +1,38 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { UserStore } from '../types/store';
+import { createStore } from 'zustand'
 
-// 用户 store
-export const useUserStore = create<UserStore>()(
-  devtools(
-    persist(
-      (set, _get) => ({
-        id: null,
-        name: null,
-        email: null,
-        isLoggedIn: false,
+export interface UserState {
+  id: string | null;
+  name: string | null;
+  email: string | null;
+  isLoggedIn: boolean;
+}
 
-        login: (user) => {
-          return set(
-            { ...user, isLoggedIn: true },
-            false,
-            'login'
-          )
-        },
+export interface UserActions {
+  login: (user: UserState) => void;
+  logout: () => void;
+  updateProfile: (updates: Partial<Pick<UserState, 'name' | 'email'>>) => void;
+}
 
-        logout: () =>
-          set(
-            { id: null, name: null, email: null, isLoggedIn: false },
-            false,
-            'logout'
-          ),
+export type UserProps = UserState & UserActions
 
-        updateProfile: (updates) =>
-          set(
-            (state) => ({ ...state, ...updates }),
-            false,
-            'updateProfile'
-          ),
-      }),
-      {
-        name: 'user-storage',
-        version: 1,
-        // 只持久化必要的用户信息
-        /* partialize: (state) => ({
-          id: state.id,
-          name: state.name,
-          email: state.email,
-          isLoggedIn: !!state.id,
-        }), */
-      }
-    ),
-    {
-      name: 'user-store',
-    }
-  )
-);
+export type UserStore = ReturnType<typeof createUserStore>
+
+
+
+
+export const createUserStore = (initProps?: Partial<UserProps>) => {
+  const DEFAULT_PROPS: UserState = {
+    id: null,
+    name: '',
+    email: '',
+    isLoggedIn: false,
+  }
+  return createStore<UserProps>()((set) => ({
+    ...DEFAULT_PROPS,
+    ...initProps,
+    login: (user: UserState) => set({ ...user }),
+    logout: () => set({ id: null, name: '', email: '' }),
+    updateProfile: (updates: Partial<Pick<UserState, "name" | "email">>) => set(updates),
+  }))
+}
 

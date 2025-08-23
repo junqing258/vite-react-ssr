@@ -2,7 +2,9 @@ import { useEffect, startTransition, useContext } from 'react';
 import { useThemeStore } from '../store';
 import { initThemeListener } from '../store/themeStore';
 import { useHydration } from './useHydration';
-import { PageContext } from '../App';
+import { useStore } from 'zustand';
+import { PageContext, UserContext } from '../components/Contexts';
+import { UserProps } from '../store/userStore';
 
 
 /* // 用于初始化和管理全局状态的 Hook
@@ -22,6 +24,12 @@ export const useGlobalStore = () => {
   };
 }; */
 // export const usePageContext = () => useContext(PageContext);
+
+export function useUserContext<T>(selector: (state: UserProps) => T): T {
+  const store = useContext(UserContext)
+  if (!store) throw new Error('Missing UserContext.Provider in the tree')
+  return useStore(store, selector)
+}
 
 export const usePageData = () => {
   return useContext(PageContext);
