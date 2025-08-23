@@ -43,10 +43,6 @@ export function clearServerData() {
   }
 }
 
-// 检查是否有预加载数据
-export function hasServerData() {
-  return typeof window !== 'undefined' && window.__PAGE_DATA__;
-}
 
 // 从缓存获取客户端数据
 export function getCachedClientData(route: string) {

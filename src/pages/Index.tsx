@@ -26,6 +26,7 @@ interface HomeProps {
 
 const Home: PageComponent<HomeProps> = () => {
   const pageData = usePageData() as { props: HomeProps };
+
   const [config, setConfig] = useState<HomeProps["config"]>(
     pageData?.props?.config
   );
