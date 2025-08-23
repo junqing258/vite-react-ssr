@@ -23,10 +23,10 @@ const getRoot = ({ url, userAgent, cookie }: Options, pageData: any) => {
         <DeviceProvider deviceInfo={deviceInfo}>
           <Helmet>
             <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
-              pageData
+              pageData || {}
             )}`}</script>
           </Helmet>
-          <App pageData={pageData} />
+          <App pageData={pageData || {}} />
         </DeviceProvider>
       </StaticRouter>
     </StrictMode>

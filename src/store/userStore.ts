@@ -6,7 +6,7 @@ import { UserStore } from '../types/store';
 export const useUserStore = create<UserStore>()(
   devtools(
     persist(
-      (set) => ({
+      (set, _get) => ({
         id: null,
         name: null,
         email: null,
