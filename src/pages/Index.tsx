@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useCounterStore, useUserStore } from "../store";
 
 const Home: React.FC = () => {
   return (
@@ -38,13 +39,26 @@ const Home: React.FC = () => {
           >
             联系我们
           </Link>
+          <Link
+            to="/zustand-demo"
+            className="mx-4 text-purple-600 hover:text-purple-800 underline font-medium"
+          >
+            Zustand 示例
+          </Link>
         </div>
 
         <div className="mt-12 p-8 border border-gray-300 rounded-lg bg-gray-50 max-w-md mx-auto">
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-            计数器示例
+            Zustand 计数器示例
           </h2>
           <CounterExample />
+        </div>
+        
+        <div className="mt-8 p-8 border border-gray-200 rounded-lg bg-white max-w-md mx-auto">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
+            用户状态示例
+          </h2>
+          <UserStatusExample />
         </div>
 
         <div className="mt-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg max-w-lg mx-auto">
@@ -64,33 +78,76 @@ const Home: React.FC = () => {
 };
 
 const CounterExample: React.FC = () => {
-  const [count, setCount] = React.useState(0);
+  const { count, increment, decrement, reset } = useCounterStore();
 
   return (
     <div className="space-y-4">
-      <button onClick={() => setCount((count) => count + 1)} className="btn">
-        count is {count}
-      </button>
+      <div className="text-3xl font-bold text-blue-600">{count}</div>
       <div className="flex justify-center space-x-2">
         <button
-          onClick={() => setCount(count - 1)}
+          onClick={decrement}
           className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
         >
           -1
         </button>
         <button
-          onClick={() => setCount(0)}
+          onClick={reset}
           className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
         >
           Reset
         </button>
         <button
-          onClick={() => setCount(count + 1)}
+          onClick={increment}
           className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
         >
           +1
         </button>
       </div>
+      <p className="text-sm text-gray-600">
+        这个计数器使用 Zustand 状态管理
+      </p>
+    </div>
+  );
+};
+
+const UserStatusExample: React.FC = () => {
+  const { id: userId, name, login, logout } = useUserStore();
+
+  const handleLogin = () => {
+    login({
+      id: "1",
+      name: "演示用户",
+      email: 'demo@example.com',
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {userId ? (
+        <div>
+          <p className="text-green-600 font-medium">✓ 已登录</p>
+          <p className="text-gray-600">欢迎，{name}!</p>
+          <button
+            onClick={logout}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+          >
+            退出登录
+          </button>
+        </div>
+      ) : (
+        <div>
+          <p className="text-gray-600">未登录状态</p>
+          <button
+            onClick={handleLogin}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          >
+            登录
+          </button>
+        </div>
+      )}
+      <p className="text-sm text-gray-600">
+        用户状态会自动持久化到本地存储
+      </p>
     </div>
   );
 };

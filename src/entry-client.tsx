@@ -9,12 +9,14 @@ import { detectDevice } from "./utils/deviceDetection";
 
 const deviceInfo = detectDevice(window.navigator.userAgent);
 
+const pageData = window.__INITIAL_DATA__ || {};
+// 延迟水合，避免与初始渲染冲突
 hydrateRoot(
   document.getElementById("root") as HTMLElement,
   <StrictMode>
     <BrowserRouter>
       <DeviceProvider deviceInfo={deviceInfo}>
-        <App />
+        <App pageData={pageData} />
       </DeviceProvider>
     </BrowserRouter>
   </StrictMode>

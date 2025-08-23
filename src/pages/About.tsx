@@ -1,26 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import UserStatus from "../components/UserStatus";
 
 const About: React.FC = () => {
   return (
     <>
       <Helmet>
         <title>关于我们 - Vite React SSR</title>
-        <meta
-          name="description"
-          content="了解我们的技术栈：Vite、React 18、React Router、TypeScript 和 Express 服务器端渲染"
-        />
-        <meta
-          name="keywords"
-          content="关于我们, Vite, React, TypeScript, Express, SSR"
-        />
-        <meta property="og:title" content="关于我们 - Vite React SSR" />
-        <meta
-          property="og:description"
-          content="了解我们的技术栈：Vite、React 18、React Router、TypeScript 和 Express 服务器端渲染"
-        />
-        <link rel="canonical" href="/about" />
       </Helmet>
       <div className="container mx-auto px-4 md:px-0">
         <h1>关于我们</h1>
@@ -56,6 +43,8 @@ const About: React.FC = () => {
           <li>热模块替换 (HMR)</li>
           <li>TypeScript 支持</li>
         </ul>
+
+        <UserStatus />
 
         <div style={{ marginTop: "2rem" }}>
           <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>

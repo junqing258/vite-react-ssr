@@ -23,7 +23,8 @@
     "react-router": "^7.8.1",
     "react-router-dom": "^7.8.1",
     "react-use": "^17.6.0",
-    "sirv": "^3.0.1"
+    "sirv": "^3.0.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

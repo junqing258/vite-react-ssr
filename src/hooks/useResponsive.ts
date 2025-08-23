@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DEFAULT_BREAKPOINTS } from '../types/device';
 import { useWindowSize } from './useWindowSize';
 import { useDevice } from '../components/DeviceContext';
+import { useClientEffect } from './useHydration';
 
 export interface UseResponsiveOptions {
   // 自定义断点
@@ -33,7 +34,7 @@ export function useResponsive() {
   const [isMd, setIsMd] = useState(defaultWidth > mobileBreakpoint && defaultWidth <= tabletBreakpoint);
   const [isLg, setIsLg] = useState(defaultWidth > tabletBreakpoint);
 
-  useEffect(() => {
+  useClientEffect(() => {
     setIsSm(currentWidth <= mobileBreakpoint);
     setIsMd(currentWidth > mobileBreakpoint && currentWidth <= tabletBreakpoint);
     setIsLg(currentWidth > tabletBreakpoint);

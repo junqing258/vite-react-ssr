@@ -52,8 +52,9 @@ app.use('*all', async (req, res) => {
     }
 
     const userAgent = req.headers['user-agent'] || ''
-    // const cookie = req.headers['cookie'] || ''
-    const rendered = await render({ url, userAgent })
+    const cookie = req.headers['cookie'] || ''
+
+    const rendered = await render({ url, userAgent, cookie })
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')
