@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DEFAULT_BREAKPOINTS } from '../types/device';
 import { useWindowSize } from './useWindowSize';
-import { useDevice } from '../components/DeviceContext';
+import { useDevice } from '../contexts/DeviceContext';
 import { useClientEffect } from './useHydration';
 
 export interface UseResponsiveOptions {

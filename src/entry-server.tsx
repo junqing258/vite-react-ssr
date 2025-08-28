@@ -6,7 +6,7 @@ import "virtual:uno.css";
 import { Helmet } from "react-helmet";
 import { I18nextProvider } from "react-i18next";
 import App from "./App";
-import { DeviceProvider } from "./components/DeviceContext";
+import { DeviceContext } from "./contexts/DeviceContext";
 import { LocalizedRouteProvider } from "./components/LocalizedRoute";
 import { detectDevice } from "./utils/deviceDetection";
 import { pageDataLoader } from "./server/pageDataLoder";
@@ -42,9 +42,9 @@ const getRoot = (
       <I18nextProvider i18n={i18nInstance}>
         <LocalizedRouteProvider language={language}>
           <StaticRouter location={url}>
-            <DeviceProvider deviceInfo={deviceInfo}>
+            <DeviceContext.Provider value={{ deviceInfo }}>
               <App pageData={pageData || {}} />
-            </DeviceProvider>
+            </DeviceContext.Provider>
           </StaticRouter>
         </LocalizedRouteProvider>
       </I18nextProvider>
@@ -112,5 +112,5 @@ export async function render(opt: Options) {
 export const {
   detectServerLanguage,
   shouldRedirectToLocalizedUrl,
-  extractLanguageFromPath
+  extractLanguageFromPath,
 } = languageDetector;

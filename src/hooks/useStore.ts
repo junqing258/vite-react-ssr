@@ -3,7 +3,7 @@ import { useThemeStore } from '../store';
 import { initThemeListener } from '../store/themeStore';
 import { useHydration } from './useHydration';
 import { useStore } from 'zustand';
-import { PageContext, UserContext } from '../components/Contexts';
+import { UserContext } from '../contexts/CommonContexts';
 import { UserProps } from '../store/userStore';
 
 
@@ -23,7 +23,6 @@ export const useGlobalStore = () => {
     },
   };
 }; */
-// export const usePageContext = () => useContext(PageContext);
 
 export function useUserContext<T>(selector: (state: UserProps) => T): T {
   const store = useContext(UserContext)
@@ -31,9 +30,6 @@ export function useUserContext<T>(selector: (state: UserProps) => T): T {
   return useStore(store, selector)
 }
 
-export const usePageData = () => {
-  return useContext(PageContext);
-};
 
 
 // 用于处理主题初始化的 Hook（SSR 友好）

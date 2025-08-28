@@ -8,7 +8,7 @@ import { useThemeInit } from "./hooks/useStore";
 import { useRef } from "react";
 import { createUserStore } from "./store/userStore";
 import { get } from "lodash-es";
-import { PageContext, UserContext } from "./components/Contexts";
+import { PageContext, UserContext } from "./contexts/CommonContexts";
 
 const langRoutes = routes.map((route) => ({
   ...route,
