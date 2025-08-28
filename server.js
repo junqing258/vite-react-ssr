@@ -75,8 +75,8 @@ app.use((req, res, next) => {
       })
       .catch(next)
   } else {
-    // 生产环境：直接导入
-    import('./dist/server/languageDetector.js')
+    // 生产环境：从 entry-server.js 导入
+    import('./dist/server/entry-server.js')
       .then(({ shouldRedirectToLocalizedUrl: checkRedirect }) => {
         const result = checkRedirect(req)
         if (result.shouldRedirect) {
@@ -121,8 +121,8 @@ app.use(async (req, res) => {
       detectedLanguage = result.language
       pathWithoutLang = result.pathWithoutLang
     } else {
-      // 生产环境：直接导入
-      const { detectServerLanguage } = await import('./dist/server/languageDetector.js')
+      // 生产环境：从 entry-server.js 导入
+      const { detectServerLanguage } = await import('./dist/server/entry-server.js')
       const result = detectServerLanguage(req)
       detectedLanguage = result.language
       pathWithoutLang = result.pathWithoutLang

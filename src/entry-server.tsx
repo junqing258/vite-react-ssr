@@ -11,6 +11,8 @@ import { LocalizedRouteProvider } from "./components/LocalizedRoute";
 import { detectDevice } from "./utils/deviceDetection";
 import { pageDataLoader } from "./server/pageDataLoder";
 import { createServerI18n } from "./server/i18nServer";
+// 确保语言检测器被打包到 dist 中
+import * as languageDetector from "./server/languageDetector";
 
 type Options = {
   url: string;
@@ -105,3 +107,10 @@ export async function render(opt: Options) {
     });
   });
 }
+
+// 导出语言检测器函数，确保它们在生产构建中可用
+export const {
+  detectServerLanguage,
+  shouldRedirectToLocalizedUrl,
+  extractLanguageFromPath
+} = languageDetector;
