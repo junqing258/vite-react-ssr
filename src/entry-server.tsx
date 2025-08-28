@@ -4,31 +4,39 @@ import { StaticRouter } from "react-router-dom";
 import { Writable } from "stream";
 import "virtual:uno.css";
 import { Helmet } from "react-helmet";
+import { I18nextProvider } from 'react-i18next';
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
 import { pageDataLoader } from "./server/pageDataLoder";
+import { createServerI18n } from "./server/i18nServer";
 
 type Options = {
   url: string;
   userAgent: string;
   cookie: string;
+  language?: string;
 };
 
-const getRoot = ({ url, userAgent, cookie }: Options, pageData: any) => {
+const getRoot = ({ url, userAgent, cookie, language = 'zh-CN' }: Options, pageData: any) => {
   const deviceInfo = detectDevice(userAgent);
+  const i18nInstance = createServerI18n(language);
+  
   return (
     <StrictMode>
-      <StaticRouter location={url}>
-        <DeviceProvider deviceInfo={deviceInfo}>
-          <Helmet>
-            <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
-              pageData || {}
-            )}`}</script>
-          </Helmet>
-          <App pageData={pageData || {}} />
-        </DeviceProvider>
-      </StaticRouter>
+      <I18nextProvider i18n={i18nInstance}>
+        <StaticRouter location={url}>
+          <DeviceProvider deviceInfo={deviceInfo}>
+            <Helmet>
+              <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
+                pageData || {}
+              )}`}</script>
+              <script>{`window.__INITIAL_LANGUAGE__ = ${JSON.stringify(language)}`}</script>
+            </Helmet>
+            <App pageData={pageData || {}} />
+          </DeviceProvider>
+        </StaticRouter>
+      </I18nextProvider>
     </StrictMode>
   );
 };

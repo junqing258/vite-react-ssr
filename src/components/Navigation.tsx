@@ -1,8 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useResponsive } from "../hooks/useResponsive";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const NavigationDesktop: React.FC = () => {
+  const { t } = useTranslation('common');
+  
   // 在服务器端渲染时安全处理 location
   let location;
   try {
@@ -20,7 +24,7 @@ const NavigationDesktop: React.FC = () => {
             to="/"
             className="text-xl font-bold text-blue-600 no-underline mr-auto"
           >
-            Vite + React
+            {t('navigation.brand')}
           </Link>
         </li>
         <li>
@@ -32,7 +36,7 @@ const NavigationDesktop: React.FC = () => {
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
-            首页
+            {t('navigation.home')}
           </Link>
         </li>
         <li>
@@ -44,7 +48,7 @@ const NavigationDesktop: React.FC = () => {
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
-            关于
+            {t('navigation.about')}
           </Link>
         </li>
         <li>
@@ -56,7 +60,7 @@ const NavigationDesktop: React.FC = () => {
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
-            联系
+            {t('navigation.contact')}
           </Link>
         </li>
         <li>
@@ -68,8 +72,11 @@ const NavigationDesktop: React.FC = () => {
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
-            UnoCSS
+            {t('navigation.unocss')}
           </Link>
+        </li>
+        <li className="ml-auto">
+          <LanguageSwitcher />
         </li>
       </ul>
     </nav>

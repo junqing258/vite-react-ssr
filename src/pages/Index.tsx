@@ -3,48 +3,51 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useCounterStore } from "../store";
 import { useUserContext } from "../hooks/useStore";
+import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation('common');
+  
   return (
     <div className="container mx-auto px-4 md:px-0">
       <Helmet>
-        <title>首页 - Vite React SSR</title>
+        <title>{t('home.title')}</title>
         <meta
           name="description"
-          content="欢迎来到我们的首页，这是一个使用 Vite + React + React Router + UnoCSS 的应用"
+          content={t('home.description')}
         />
-        <meta name="keywords" content="Vite, React, SSR, UnoCSS, TypeScript" />
-        <meta property="og:title" content="首页 - Vite React SSR" />
+        <meta name="keywords" content={t('home.keywords')} />
+        <meta property="og:title" content={t('home.title')} />
         <meta
           property="og:description"
-          content="欢迎来到我们的首页，这是一个使用 Vite + React + React Router + UnoCSS 的应用"
+          content={t('home.description')}
         />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="/" />
       </Helmet>
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 text-gray-800">欢迎来到首页</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-800">{t('home.welcome')}</h1>
         <p className="text-lg text-gray-600 mb-8">
-          这是一个使用 Vite + React + React Router + UnoCSS 的应用
+          {t('home.subtitle')}
         </p>
         <div className="mt-8 space-x-4">
           <Link
             to="/about"
             className="mx-4 text-blue-600 hover:text-blue-800 underline"
           >
-            关于我们
+            {t('home.aboutUs')}
           </Link>
           <Link
             to="/contact"
             className="mx-4 text-blue-600 hover:text-blue-800 underline"
           >
-            联系我们
+            {t('home.contactUs')}
           </Link>
           <Link
             to="/zustand-demo"
             className="mx-4 text-purple-600 hover:text-purple-800 underline font-medium"
           >
-            Zustand 示例
+            {t('home.zustandDemo')}
           </Link>
         </div>
 

@@ -1,54 +1,56 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useTranslation } from 'react-i18next';
 import UserStatus from "../components/UserStatus";
 
 const About: React.FC = () => {
+  const { t } = useTranslation('common');
+  
   return (
     <>
       <Helmet>
-        <title>关于我们 - Vite React SSR</title>
+        <title>{t('about.title')}</title>
       </Helmet>
       <div className="container mx-auto px-4 md:px-0">
-        <h1>关于我们</h1>
+        <h1>{t('about.heading')}</h1>
         <p>
-          这是一个基于 Vite、React 和 React Router 构建的现代化单页应用程序。
-          该项目展示了如何使用这些技术栈来创建快速、可扩展的 Web 应用。
+          {t('about.description')}
         </p>
 
-        <h2>技术栈</h2>
+        <h2>{t('about.techStack')}</h2>
         <ul>
           <li>
-            <strong>Vite</strong> - 快速的构建工具和开发服务器
+            <strong>Vite</strong> - {t('about.vite')}
           </li>
           <li>
-            <strong>React 18</strong> - 用户界面构建库
+            <strong>React 18</strong> - {t('about.react')}
           </li>
           <li>
-            <strong>React Router</strong> - 客户端路由解决方案
+            <strong>React Router</strong> - {t('about.router')}
           </li>
           <li>
-            <strong>TypeScript</strong> - 类型安全的 JavaScript
+            <strong>TypeScript</strong> - {t('about.typescript')}
           </li>
           <li>
-            <strong>Express</strong> - 服务器端渲染支持
+            <strong>Express</strong> - {t('about.express')}
           </li>
         </ul>
 
-        <h2>特性</h2>
+        <h2>{t('about.features')}</h2>
         <ul>
-          <li>服务器端渲染 (SSR)</li>
-          <li>客户端水合 (Client Hydration)</li>
-          <li>动态路由加载</li>
-          <li>热模块替换 (HMR)</li>
-          <li>TypeScript 支持</li>
+          <li>{t('about.ssr')}</li>
+          <li>{t('about.hydration')}</li>
+          <li>{t('about.routing')}</li>
+          <li>{t('about.hmr')}</li>
+          <li>{t('about.tsSupport')}</li>
         </ul>
 
         <UserStatus />
 
         <div style={{ marginTop: "2rem" }}>
           <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
-            ← 返回首页
+            {t('about.backToHome')}
           </Link>
         </div>
       </div>

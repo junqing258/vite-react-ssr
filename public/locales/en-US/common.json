@@ -1,0 +1,58 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "unocss": "UnoCSS",
+    "brand": "Vite + React"
+  },
+  "home": {
+    "title": "Home - Vite React SSR",
+    "description": "Welcome to our home page, this is an application built with Vite + React + React Router + UnoCSS",
+    "keywords": "Vite, React, SSR, UnoCSS, TypeScript",
+    "welcome": "Welcome to Home",
+    "subtitle": "This is an application built with Vite + React + React Router + UnoCSS",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "zustandDemo": "Zustand Demo"
+  },
+  "about": {
+    "title": "About Us - Vite React SSR",
+    "heading": "About Us",
+    "description": "This is a modern single-page application built with Vite, React, and React Router. This project demonstrates how to use these technology stacks to create fast and scalable web applications.",
+    "techStack": "Tech Stack",
+    "features": "Features",
+    "vite": "Fast build tool and development server",
+    "react": "User interface building library",
+    "router": "Client-side routing solution",
+    "typescript": "Type-safe JavaScript",
+    "express": "Server-side rendering support",
+    "ssr": "Server-Side Rendering (SSR)",
+    "hydration": "Client Hydration",
+    "routing": "Dynamic route loading",
+    "hmr": "Hot Module Replacement (HMR)",
+    "tsSupport": "TypeScript Support",
+    "backToHome": "← Back to Home"
+  },
+  "contact": {
+    "title": "Contact Us - Vite React SSR",
+    "heading": "Contact Us",
+    "description": "If you have any questions or suggestions, please feel free to contact us.",
+    "metaDescription": "If you have any questions or suggestions, please feel free to contact us. Fill out the form to send us a message.",
+    "keywords": "contact us, feedback, message, inquiry",
+    "nameLabel": "Name:",
+    "emailLabel": "Email:",
+    "messageLabel": "Message:",
+    "namePlaceholder": "Please enter your name",
+    "emailPlaceholder": "Please enter your email",
+    "messagePlaceholder": "Please enter your message",
+    "submitButton": "Submit",
+    "thankYouMessage": "Thank you for your message! This is a demo form.",
+    "backToHome": "← Back to Home"
+  },
+  "common": {
+    "language": "Language",
+    "chinese": "中文",
+    "english": "English"
+  }
+}

@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useTranslation } from 'react-i18next';
 
 const Contact: React.FC = () => {
+  const { t } = useTranslation('common');
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -21,29 +23,29 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("感谢您的留言！这是一个演示表单。");
+    alert(t('contact.thankYouMessage'));
     setFormData({ name: "", email: "", message: "" });
   };
 
   return (
     <>
       <Helmet>
-        <title>联系我们 - Vite React SSR</title>
+        <title>{t('contact.title')}</title>
         <meta
           name="description"
-          content="如果您有任何问题或建议，请随时与我们联系。填写表单发送留言给我们。"
+          content={t('contact.metaDescription')}
         />
-        <meta name="keywords" content="联系我们, 反馈, 留言, 问题咨询" />
-        <meta property="og:title" content="联系我们 - Vite React SSR" />
+        <meta name="keywords" content={t('contact.keywords')} />
+        <meta property="og:title" content={t('contact.title')} />
         <meta
           property="og:description"
-          content="如果您有任何问题或建议，请随时与我们联系。填写表单发送留言给我们。"
+          content={t('contact.metaDescription')}
         />
         <link rel="canonical" href="/contact" />
       </Helmet>
       <div className="container mx-auto px-4 md:px-0">
-        <h1>联系我们</h1>
-        <p>如果您有任何问题或建议，请随时与我们联系。</p>
+        <h1>{t('contact.heading')}</h1>
+        <p>{t('contact.description')}</p>
 
         <form onSubmit={handleSubmit} style={{ marginTop: "2rem" }}>
           <div style={{ marginBottom: "1rem" }}>
@@ -51,7 +53,7 @@ const Contact: React.FC = () => {
               htmlFor="name"
               style={{ display: "block", marginBottom: "0.5rem" }}
             >
-              姓名:
+              {t('contact.nameLabel')}
             </label>
             <input
               type="text"
@@ -59,6 +61,7 @@ const Contact: React.FC = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder={t('contact.namePlaceholder')}
               required
               style={{
                 width: "100%",
@@ -75,7 +78,7 @@ const Contact: React.FC = () => {
               htmlFor="email"
               style={{ display: "block", marginBottom: "0.5rem" }}
             >
-              邮箱:
+              {t('contact.emailLabel')}
             </label>
             <input
               type="email"
@@ -83,6 +86,7 @@ const Contact: React.FC = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              placeholder={t('contact.emailPlaceholder')}
               required
               style={{
                 width: "100%",
@@ -99,13 +103,14 @@ const Contact: React.FC = () => {
               htmlFor="message"
               style={{ display: "block", marginBottom: "0.5rem" }}
             >
-              留言:
+              {t('contact.messageLabel')}
             </label>
             <textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
+              placeholder={t('contact.messagePlaceholder')}
               required
               rows={5}
               style={{
@@ -131,13 +136,13 @@ const Contact: React.FC = () => {
               cursor: "pointer",
             }}
           >
-            发送留言
+            {t('contact.submitButton')}
           </button>
         </form>
 
         <div style={{ marginTop: "2rem" }}>
           <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
-            ← 返回首页
+            {t('contact.backToHome')}
           </Link>
         </div>
       </div>

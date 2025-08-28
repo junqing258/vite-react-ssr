@@ -32,6 +32,27 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }))
 }
 
+// Language switching API endpoint
+app.post('/api/language', express.json(), (req, res) => {
+  const { language } = req.body
+  const supportedLanguages = ['zh-CN', 'en-US']
+  
+  if (!language || !supportedLanguages.includes(language)) {
+    return res.status(400).json({ error: 'Invalid language' })
+  }
+  
+  // 设置语言 cookie
+  const maxAge = 365 * 24 * 60 * 60 // 1年
+  res.cookie('i18next-lng', language, {
+    path: '/',
+    maxAge: maxAge * 1000, // express 需要毫秒
+    sameSite: 'strict',
+    secure: false, // 开发环境设为 false
+  })
+  
+  res.json({ success: true, language })
+})
+
 // Serve HTML
 app.use('*all', async (req, res) => {
   try {
@@ -54,7 +75,20 @@ app.use('*all', async (req, res) => {
     const userAgent = req.headers['user-agent'] || ''
     const cookie = req.headers['cookie'] || ''
 
-    const rendered = await render({ url, userAgent, cookie })
+    // 语言检测逻辑
+    let detectedLanguage = 'zh-CN' // 默认语言
+    
+    if (!isProduction && vite) {
+      // 开发环境：动态导入语言检测器
+      const { detectServerLanguage } = await vite.ssrLoadModule('/src/server/languageDetector.ts')
+      detectedLanguage = detectServerLanguage(req)
+    } else {
+      // 生产环境：直接导入
+      const { detectServerLanguage } = await import('./dist/server/languageDetector.js')
+      detectedLanguage = detectServerLanguage(req)
+    }
+
+    const rendered = await render({ url, userAgent, cookie, language: detectedLanguage })
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')

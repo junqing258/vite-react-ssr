@@ -1,0 +1,58 @@
+{
+  "navigation": {
+    "home": "首页",
+    "about": "关于",
+    "contact": "联系",
+    "unocss": "UnoCSS样式",
+    "brand": "Vite + React"
+  },
+  "home": {
+    "title": "首页 - Vite React SSR",
+    "description": "欢迎来到我们的首页，这是一个使用 Vite + React + React Router + UnoCSS 的应用",
+    "keywords": "Vite, React, SSR, UnoCSS, TypeScript",
+    "welcome": "欢迎来到首页",
+    "subtitle": "这是一个使用 Vite + React + React Router + UnoCSS 的应用",
+    "aboutUs": "关于我们",
+    "contactUs": "联系我们",
+    "zustandDemo": "Zustand 示例"
+  },
+  "about": {
+    "title": "关于我们 - Vite React SSR",
+    "heading": "关于我们",
+    "description": "这是一个基于 Vite、React 和 React Router 构建的现代化单页应用程序。该项目展示了如何使用这些技术栈来创建快速、可扩展的 Web 应用。",
+    "techStack": "技术栈",
+    "features": "特性",
+    "vite": "快速的构建工具和开发服务器",
+    "react": "用户界面构建库",
+    "router": "客户端路由解决方案",
+    "typescript": "类型安全的 JavaScript",
+    "express": "服务器端渲染支持",
+    "ssr": "服务器端渲染 (SSR)",
+    "hydration": "客户端水合 (Client Hydration)",
+    "routing": "动态路由加载",
+    "hmr": "热模块替换 (HMR)",
+    "tsSupport": "TypeScript 支持",
+    "backToHome": "← 返回首页"
+  },
+  "contact": {
+    "title": "联系我们 - Vite React SSR",
+    "heading": "联系我们",
+    "description": "如果您有任何问题或建议，请随时与我们联系。",
+    "metaDescription": "如果您有任何问题或建议，请随时与我们联系。填写表单发送留言给我们。",
+    "keywords": "联系我们, 反馈, 留言, 问题咨询",
+    "nameLabel": "姓名：",
+    "emailLabel": "邮箱：",
+    "messageLabel": "留言：",
+    "namePlaceholder": "请输入您的姓名",
+    "emailPlaceholder": "请输入您的邮箱",
+    "messagePlaceholder": "请输入您的留言内容",
+    "submitButton": "提交",
+    "thankYouMessage": "感谢您的留言！这是一个演示表单。",
+    "backToHome": "← 返回首页"
+  },
+  "common": {
+    "language": "语言",
+    "chinese": "中文",
+    "english": "English"
+  }
+}

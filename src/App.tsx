@@ -1,4 +1,5 @@
 import "./App.scss";
+import "./i18n"; // 初始化 i18n
 import routes from "virtual:generated-pages-react";
 import { useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation";
