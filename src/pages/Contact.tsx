@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useTranslation } from 'react-i18next';
+import { LocalizedLink } from '../components/LocalizedRoute';
 
 const Contact: React.FC = () => {
   const { t } = useTranslation('common');
@@ -141,9 +141,9 @@ const Contact: React.FC = () => {
         </form>
 
         <div style={{ marginTop: "2rem" }}>
-          <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
+          <LocalizedLink to="/" style={{ color: "#646cff", textDecoration: "none" }}>
             {t('contact.backToHome')}
-          </Link>
+          </LocalizedLink>
         </div>
       </div>
     </>

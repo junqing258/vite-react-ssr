@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useResponsive } from "../hooks/useResponsive";
 import { useTranslation } from 'react-i18next';
+import { LocalizedLink } from './LocalizedRoute';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const NavigationDesktop: React.FC = () => {
@@ -16,64 +17,71 @@ const NavigationDesktop: React.FC = () => {
     location = { pathname: "/" };
   }
 
+  // 获取去掉语言前缀的路径用于比较
+  const getPathWithoutLang = (path: string) => {
+    return path.replace(/^\/[a-z]{2}-[A-Z]{2}/, '') || '/';
+  };
+
+  const currentPath = getPathWithoutLang(location.pathname);
+
   return (
     <nav className="px-8 py-4 bg-gray-50 border-b border-gray-200 mb-8">
       <ul className="flex list-none m-0 p-0 gap-8 items-center">
         <li>
-          <Link
+          <LocalizedLink
             to="/"
             className="text-xl font-bold text-blue-600 no-underline mr-auto"
           >
             {t('navigation.brand')}
-          </Link>
+          </LocalizedLink>
         </li>
         <li>
-          <Link
+          <LocalizedLink
             to="/"
             className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
-              location.pathname === "/"
+              currentPath === "/"
                 ? "text-blue-600 font-bold bg-blue-50"
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
             {t('navigation.home')}
-          </Link>
+          </LocalizedLink>
         </li>
         <li>
-          <Link
+          <LocalizedLink
             to="/about"
             className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
-              location.pathname === "/about"
+              currentPath === "/about"
                 ? "text-blue-600 font-bold bg-blue-50"
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
             {t('navigation.about')}
-          </Link>
+          </LocalizedLink>
         </li>
         <li>
-          <Link
+          <LocalizedLink
             to="/contact"
             className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
-              location.pathname === "/contact"
+              currentPath === "/contact"
                 ? "text-blue-600 font-bold bg-blue-50"
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
             {t('navigation.contact')}
-          </Link>
+          </LocalizedLink>
         </li>
         <li>
-          <Link
+          <LocalizedLink
             to="/unocss"
             className={`no-underline px-4 py-2 rounded transition-all duration-200 ${
-              location.pathname === "/unocss"
+              currentPath === "/unocss"
                 ? "text-blue-600 font-bold bg-blue-50"
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
             }`}
           >
             {t('navigation.unocss')}
-          </Link>
+          </LocalizedLink>
         </li>
         <li className="ml-auto">
           <LanguageSwitcher />

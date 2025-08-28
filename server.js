@@ -53,8 +53,43 @@ app.post('/api/language', express.json(), (req, res) => {
   res.json({ success: true, language })
 })
 
-// Serve HTML
-app.use('*all', async (req, res) => {
+// 语言路径重定向中间件
+app.use((req, res, next) => {
+  // 跳过 API 路径和静态资源
+  if (req.originalUrl.startsWith('/api/') || 
+      req.originalUrl.startsWith('/assets/') ||
+      req.originalUrl.startsWith('/locales/') ||
+      req.originalUrl.includes('.')) {
+    return next()
+  }
+  
+  if (!isProduction && vite) {
+    // 开发环境：动态导入
+    vite.ssrLoadModule('/src/server/languageDetector.ts')
+      .then(({ shouldRedirectToLocalizedUrl: checkRedirect }) => {
+        const result = checkRedirect(req)
+        if (result.shouldRedirect) {
+          return res.redirect(302, result.redirectUrl)
+        }
+        next()
+      })
+      .catch(next)
+  } else {
+    // 生产环境：直接导入
+    import('./dist/server/languageDetector.js')
+      .then(({ shouldRedirectToLocalizedUrl: checkRedirect }) => {
+        const result = checkRedirect(req)
+        if (result.shouldRedirect) {
+          return res.redirect(302, result.redirectUrl)
+        }
+        next()
+      })
+      .catch(next)
+  }
+})
+
+// Serve HTML - 处理所有其他路由
+app.use(async (req, res) => {
   try {
     const url = req.originalUrl
 
@@ -77,22 +112,33 @@ app.use('*all', async (req, res) => {
 
     // 语言检测逻辑
     let detectedLanguage = 'zh-CN' // 默认语言
+    let pathWithoutLang = url
     
     if (!isProduction && vite) {
       // 开发环境：动态导入语言检测器
       const { detectServerLanguage } = await vite.ssrLoadModule('/src/server/languageDetector.ts')
-      detectedLanguage = detectServerLanguage(req)
+      const result = detectServerLanguage(req)
+      detectedLanguage = result.language
+      pathWithoutLang = result.pathWithoutLang
     } else {
       // 生产环境：直接导入
       const { detectServerLanguage } = await import('./dist/server/languageDetector.js')
-      detectedLanguage = detectServerLanguage(req)
+      const result = detectServerLanguage(req)
+      detectedLanguage = result.language
+      pathWithoutLang = result.pathWithoutLang
     }
 
-    const rendered = await render({ url, userAgent, cookie, language: detectedLanguage })
+    const rendered = await render({ 
+      url: pathWithoutLang, // 传递去掉语言前缀的路径
+      originalUrl: url,     // 保留原始 URL 用于调试
+      userAgent, 
+      language: detectedLanguage 
+    })
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')
       .replace(`<!--app-html-->`, rendered.html ?? '')
+      .replace(`<html`, `<html ${rendered.htmlAttributes}`)
 
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
   } catch (e) {

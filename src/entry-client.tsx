@@ -5,6 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { DeviceProvider } from "./components/DeviceContext";
+import { LocalizedRouteProvider } from "./components/LocalizedRoute";
 import { detectDevice } from "./utils/deviceDetection";
 import i18n from "./i18n";
 
@@ -18,14 +19,30 @@ if (i18n.language !== initialLanguage) {
   i18n.changeLanguage(initialLanguage);
 }
 
+// 从当前 URL 提取语言代码并计算 basename
+function getBasename(): string {
+  const pathname = window.location.pathname;
+  const langMatch = pathname.match(/^\/([a-z]{2}-[A-Z]{2})/);
+  
+  if (langMatch) {
+    return `/${langMatch[1]}`;
+  }
+  
+  return '';
+}
+
+const basename = getBasename();
+
 // 延迟水合，避免与初始渲染冲突
 hydrateRoot(
   document.getElementById("root") as HTMLElement,
   <StrictMode>
-    <BrowserRouter>
-      <DeviceProvider deviceInfo={deviceInfo}>
-        <App pageData={pageData} />
-      </DeviceProvider>
+    <BrowserRouter basename={basename}>
+      <LocalizedRouteProvider language={initialLanguage}>
+        <DeviceProvider deviceInfo={deviceInfo}>
+          <App pageData={pageData} />
+        </DeviceProvider>
+      </LocalizedRouteProvider>
     </BrowserRouter>
   </StrictMode>
 );

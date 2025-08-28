@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useTranslation } from 'react-i18next';
+import { LocalizedLink } from '../components/LocalizedRoute';
 import UserStatus from "../components/UserStatus";
 
 const About: React.FC = () => {
@@ -49,9 +49,9 @@ const About: React.FC = () => {
         <UserStatus />
 
         <div style={{ marginTop: "2rem" }}>
-          <Link to="/" style={{ color: "#646cff", textDecoration: "none" }}>
+          <LocalizedLink to="/" style={{ color: "#646cff", textDecoration: "none" }}>
             {t('about.backToHome')}
-          </Link>
+          </LocalizedLink>
         </div>
       </div>
     </>

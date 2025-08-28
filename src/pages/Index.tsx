@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useCounterStore } from "../store";
 import { useUserContext } from "../hooks/useStore";
 import { useTranslation } from 'react-i18next';
+import { LocalizedLink } from '../components/LocalizedRoute';
 
 const Home: React.FC = () => {
   const { t } = useTranslation('common');
@@ -31,24 +31,24 @@ const Home: React.FC = () => {
           {t('home.subtitle')}
         </p>
         <div className="mt-8 space-x-4">
-          <Link
+          <LocalizedLink
             to="/about"
             className="mx-4 text-blue-600 hover:text-blue-800 underline"
           >
             {t('home.aboutUs')}
-          </Link>
-          <Link
+          </LocalizedLink>
+          <LocalizedLink
             to="/contact"
             className="mx-4 text-blue-600 hover:text-blue-800 underline"
           >
             {t('home.contactUs')}
-          </Link>
-          <Link
+          </LocalizedLink>
+          <LocalizedLink
             to="/zustand-demo"
             className="mx-4 text-purple-600 hover:text-purple-800 underline font-medium"
           >
             {t('home.zustandDemo')}
-          </Link>
+          </LocalizedLink>
         </div>
 
         <div className="mt-12 p-8 border border-gray-300 rounded-lg bg-gray-50 max-w-md mx-auto">
