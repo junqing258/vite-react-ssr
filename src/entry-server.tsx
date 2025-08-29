@@ -5,13 +5,9 @@ import { StaticRouter } from "react-router-dom";
 import { Writable } from "stream";
 import "virtual:uno.css";
 import { Helmet } from "react-helmet";
-import { I18nextProvider } from "react-i18next";
 import App from "./App";
-import { DeviceContext } from "./contexts/DeviceContext";
-import { LocalizedRouteProvider } from "./components/LocalizedRoute";
 import { detectDevice } from "./utils/deviceDetection";
 import { pageDataLoader } from "./server/pageDataLoder";
-import { createServerI18n } from "./server/i18nServer";
 import { detectServerLanguage } from "./server/languageDetector";
 
 const getRoot = (
@@ -21,7 +17,6 @@ const getRoot = (
   const userAgent = req.headers["user-agent"] || "";
   // const cookie = req.headers["cookie"] || "";
   const deviceInfo = detectDevice(userAgent);
-  const i18nInstance = createServerI18n(detectedLanguage);
 
   return (
     <StrictMode>
@@ -34,15 +29,13 @@ const getRoot = (
           detectedLanguage
         )}`}</script>
       </Helmet>
-      <I18nextProvider i18n={i18nInstance}>
-        <LocalizedRouteProvider language={detectedLanguage}>
-          <StaticRouter location={req.url}>
-            <DeviceContext.Provider value={{ deviceInfo }}>
-              <App pageData={pageData || {}} />
-            </DeviceContext.Provider>
-          </StaticRouter>
-        </LocalizedRouteProvider>
-      </I18nextProvider>
+      <StaticRouter location={req.url}>
+        <App
+          pageData={pageData}
+          deviceInfo={deviceInfo}
+          initialLanguage={detectedLanguage}
+        />
+      </StaticRouter>
     </StrictMode>
   );
 };

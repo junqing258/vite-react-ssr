@@ -3,7 +3,7 @@ import { useThemeStore } from '../store';
 import { initThemeListener } from '../store/themeStore';
 import { useHydration } from './useHydration';
 import { useStore } from 'zustand';
-import { UserContext } from '../contexts/CommonContexts';
+import { UserContext } from '../components/CommonContexts';
 import { UserProps } from '../store/userStore';
 
 
