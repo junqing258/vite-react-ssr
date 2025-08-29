@@ -1,15 +1,9 @@
-
+import { Request } from "express";
 import { fetchData } from "../mock/fetchData"
 
-type Params = {
-  url: string;
-  cookie: string;
-};
 
-
-
-export async function pageDataLoader({ url, cookie }: Params) {
-  const pathname = url.split('?')[0];
+export async function pageDataLoader({ pathWithoutLang }: { pathWithoutLang: string, req: Request }) {
+  const pathname = pathWithoutLang;
 
   console.log('pageDataLoader pathname:', pathname);
   const user = await fetchData('/api/user'); // 示例异步数据获取

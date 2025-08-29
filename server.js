@@ -36,11 +36,11 @@ if (!isProduction) {
 app.post('/api/language', express.json(), (req, res) => {
   const { language } = req.body
   const supportedLanguages = ['zh-CN', 'en-US']
-  
+
   if (!language || !supportedLanguages.includes(language)) {
     return res.status(400).json({ error: 'Invalid language' })
   }
-  
+
   // 设置语言 cookie
   const maxAge = 365 * 24 * 60 * 60 // 1年
   res.cookie('i18next-lng', language, {
@@ -49,20 +49,20 @@ app.post('/api/language', express.json(), (req, res) => {
     sameSite: 'strict',
     secure: false, // 开发环境设为 false
   })
-  
+
   res.json({ success: true, language })
 })
 
 // 语言路径重定向中间件
 app.use((req, res, next) => {
   // 跳过 API 路径和静态资源
-  if (req.originalUrl.startsWith('/api/') || 
-      req.originalUrl.startsWith('/assets/') ||
-      req.originalUrl.startsWith('/locales/') ||
-      req.originalUrl.includes('.')) {
+  if (req.originalUrl.startsWith('/api/') ||
+    req.originalUrl.startsWith('/assets/') ||
+    req.originalUrl.startsWith('/locales/') ||
+    req.originalUrl.includes('.')) {
     return next()
   }
-  
+
   if (!isProduction && vite) {
     // 开发环境：动态导入
     vite.ssrLoadModule('/src/server/languageDetector.ts')
@@ -107,32 +107,9 @@ app.use(async (req, res) => {
       render = (await import('./dist/server/entry-server.js')).render
     }
 
-    const userAgent = req.headers['user-agent'] || ''
-    const cookie = req.headers['cookie'] || ''
-
-    // 语言检测逻辑
-    let detectedLanguage = 'zh-CN' // 默认语言
-    let pathWithoutLang = url
-    
-    if (!isProduction && vite) {
-      // 开发环境：动态导入语言检测器
-      const { detectServerLanguage } = await vite.ssrLoadModule('/src/server/languageDetector.ts')
-      const result = detectServerLanguage(req)
-      detectedLanguage = result.language
-      pathWithoutLang = result.pathWithoutLang
-    } else {
-      // 生产环境：从 entry-server.js 导入
-      const { detectServerLanguage } = await import('./dist/server/entry-server.js')
-      const result = detectServerLanguage(req)
-      detectedLanguage = result.language
-      pathWithoutLang = result.pathWithoutLang
-    }
-
-    const rendered = await render({ 
-      url: pathWithoutLang, // 传递去掉语言前缀的路径
-      originalUrl: url,     // 保留原始 URL 用于调试
-      userAgent, 
-      language: detectedLanguage 
+    const rendered = await render({
+      req,
+      res,
     })
 
     const html = template

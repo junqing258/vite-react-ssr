@@ -1,3 +1,4 @@
+import type { Request, Response } from "express";
 import { StrictMode } from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
@@ -11,37 +12,31 @@ import { LocalizedRouteProvider } from "./components/LocalizedRoute";
 import { detectDevice } from "./utils/deviceDetection";
 import { pageDataLoader } from "./server/pageDataLoder";
 import { createServerI18n } from "./server/i18nServer";
-// 确保语言检测器被打包到 dist 中
-import * as languageDetector from "./server/languageDetector";
-
-type Options = {
-  url: string;
-  originalUrl?: string;
-  userAgent: string;
-  language?: string;
-};
+import { detectServerLanguage } from "./server/languageDetector";
 
 const getRoot = (
-  { url, userAgent, language = "zh-CN" }: Options,
+  { req, detectedLanguage }: { req: Request; detectedLanguage: string },
   pageData: any
 ) => {
+  const userAgent = req.headers["user-agent"] || "";
+  // const cookie = req.headers["cookie"] || "";
   const deviceInfo = detectDevice(userAgent);
-  const i18nInstance = createServerI18n(language);
+  const i18nInstance = createServerI18n(detectedLanguage);
 
   return (
     <StrictMode>
       <Helmet>
-        <html lang={language} />
+        <html lang={detectedLanguage} />
         <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
           pageData || {}
         )}`}</script>
         <script>{`window.__INITIAL_LANGUAGE__ = ${JSON.stringify(
-          language
+          detectedLanguage
         )}`}</script>
       </Helmet>
       <I18nextProvider i18n={i18nInstance}>
-        <LocalizedRouteProvider language={language}>
-          <StaticRouter location={url}>
+        <LocalizedRouteProvider language={detectedLanguage}>
+          <StaticRouter location={req.url}>
             <DeviceContext.Provider value={{ deviceInfo }}>
               <App pageData={pageData || {}} />
             </DeviceContext.Provider>
@@ -52,10 +47,17 @@ const getRoot = (
   );
 };
 
-export async function render(opt: Options) {
+export async function render({ req, res }: { req: Request; res: Response }) {
+  let pathWithoutLang = req.url;
+  let detectedLanguage = "zh-CN"; // 默认语言
+
+  const result = detectServerLanguage(req);
+  detectedLanguage = result.language;
+  pathWithoutLang = result.pathWithoutLang;
+
   const pageData = await pageDataLoader({
-    url: opt.url,
-    cookie: "", // 暂时传递空字符串，如果需要可以从其他地方获取
+    pathWithoutLang,
+    req,
   });
 
   return new Promise<{
@@ -92,25 +94,21 @@ export async function render(opt: Options) {
       },
     });
 
-    const stream = renderToPipeableStream(getRoot(opt, pageData), {
-      onShellReady() {
-        // The content above all Suspense boundaries is ready
-        stream.pipe(writable);
-      },
-      onShellError(error: unknown) {
-        // Something errored before we could complete the shell
-        reject(error);
-      },
-      onError(error: unknown) {
-        console.error("SSR Error:", error);
-      },
-    });
+    const stream = renderToPipeableStream(
+      getRoot({ req, detectedLanguage }, pageData),
+      {
+        onShellReady() {
+          // The content above all Suspense boundaries is ready
+          stream.pipe(writable);
+        },
+        onShellError(error: unknown) {
+          // Something errored before we could complete the shell
+          reject(error);
+        },
+        onError(error: unknown) {
+          console.error("SSR Error:", error);
+        },
+      }
+    );
   });
 }
-
-// 导出语言检测器函数，确保它们在生产构建中可用
-export const {
-  detectServerLanguage,
-  shouldRedirectToLocalizedUrl,
-  extractLanguageFromPath,
-} = languageDetector;
