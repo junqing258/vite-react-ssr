@@ -15,7 +15,6 @@ const getRoot = (
   pageData: any
 ) => {
   const userAgent = req.headers["user-agent"] || "";
-  // const cookie = req.headers["cookie"] || "";
   const deviceInfo = detectDevice(userAgent);
 
   return (
@@ -40,7 +39,7 @@ const getRoot = (
   );
 };
 
-export async function render({ req, res }: { req: Request; res: Response }) {
+export async function render({ req }: { req: Request; res: Response }) {
   let pathWithoutLang = req.url;
   let detectedLanguage = "zh-CN"; // 默认语言
 
