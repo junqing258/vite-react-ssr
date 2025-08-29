@@ -7,7 +7,7 @@ import "virtual:uno.css";
 import { Helmet } from "react-helmet";
 import App from "./App";
 import { detectDevice } from "./utils/deviceDetection";
-import { pageDataLoader } from "./server/pageDataLoder";
+import { pageDataLoader } from "./server/pageDataLoader";
 import { detectServerLanguage } from "./server/languageDetector";
 
 const getRoot = (
@@ -20,7 +20,6 @@ const getRoot = (
   return (
     <StrictMode>
       <Helmet>
-        <html lang={detectedLanguage} />
         <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
           pageData || {}
         )}`}</script>
