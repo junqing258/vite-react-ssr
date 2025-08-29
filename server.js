@@ -32,8 +32,64 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }))
 }
 
-// Serve HTML
-app.use('*all', async (req, res) => {
+// Language switching API endpoint
+app.post('/api/language', express.json(), (req, res) => {
+  const { language } = req.body
+  const supportedLanguages = ['zh-CN', 'en-US']
+
+  if (!language || !supportedLanguages.includes(language)) {
+    return res.status(400).json({ error: 'Invalid language' })
+  }
+
+  // 设置语言 cookie
+  const maxAge = 365 * 24 * 60 * 60 // 1年
+  res.cookie('i18next-lng', language, {
+    path: '/',
+    maxAge: maxAge * 1000, // express 需要毫秒
+    sameSite: 'strict',
+    secure: false, // 开发环境设为 false
+  })
+
+  res.json({ success: true, language })
+})
+
+// 语言路径重定向中间件
+app.use((req, res, next) => {
+  // 跳过 API 路径和静态资源
+  if (req.originalUrl.startsWith('/api/') ||
+    req.originalUrl.startsWith('/assets/') ||
+    req.originalUrl.startsWith('/locales/') ||
+    req.originalUrl.includes('.')) {
+    return next()
+  }
+
+  if (!isProduction && vite) {
+    // 开发环境：动态导入
+    vite.ssrLoadModule('/src/server/languageDetector.ts')
+      .then(({ shouldRedirectToLocalizedUrl: checkRedirect }) => {
+        const result = checkRedirect(req)
+        if (result.shouldRedirect) {
+          return res.redirect(302, result.redirectUrl)
+        }
+        next()
+      })
+      .catch(next)
+  } else {
+    // 生产环境：从 entry-server.js 导入
+    import('./dist/server/entry-server.js')
+      .then(({ shouldRedirectToLocalizedUrl: checkRedirect }) => {
+        const result = checkRedirect(req)
+        if (result.shouldRedirect) {
+          return res.redirect(302, result.redirectUrl)
+        }
+        next()
+      })
+      .catch(next)
+  }
+})
+
+// Serve HTML - 处理所有其他路由
+app.use(async (req, res) => {
   try {
     const url = req.originalUrl
 
@@ -51,30 +107,15 @@ app.use('*all', async (req, res) => {
       render = (await import('./dist/server/entry-server.js')).render
     }
 
-    const userAgent = req.headers['user-agent'] || ''
-    const headers = req.headers
-    const rendered = await render({ url, userAgent, headers })
-
-    // 处理重定向
-    if (rendered.pageData?.redirect) {
-      const statusCode = rendered.pageData.redirect.permanent ? 301 : 302;
-      return res.redirect(statusCode, rendered.pageData.redirect.destination);
-    }
-
-    // 处理404
-    if (rendered.pageData?.notFound) {
-      return res.status(404).send('Page not found');
-    }
-
-    // 注入页面数据到HTML
-    const pageDataScript = rendered.pageData 
-      ? `<script>window.__PAGE_DATA__ = ${JSON.stringify(rendered.pageData)}</script>`
-      : '';
+    const rendered = await render({
+      req,
+      res,
+    })
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')
       .replace(`<!--app-html-->`, rendered.html ?? '')
-      .replace(`</head>`, `${pageDataScript}</head>`)
+      .replace(`<html`, `<html ${rendered.htmlAttributes}`)
 
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
   } catch (e) {

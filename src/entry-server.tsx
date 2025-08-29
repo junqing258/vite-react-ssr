@@ -1,3 +1,4 @@
+import type { Request, Response } from "express";
 import { StrictMode } from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
@@ -5,34 +6,57 @@ import { Writable } from "stream";
 import "virtual:uno.css";
 import { Helmet } from "react-helmet";
 import App from "./App";
-import { DeviceProvider } from "./components/DeviceContext";
 import { detectDevice } from "./utils/deviceDetection";
-import { getPageDataForSSR } from "./utils/ssr/pageDataLoader";
+import { pageDataLoader } from "./server/pageDataLoader";
+import { detectServerLanguage } from "./server/languageDetector";
 
-type Options = {
-  url: string;
-  userAgent: string;
-  headers?: Record<string, string>;
-};
-
-const getRoot = ({ url, userAgent }: Options, pageData?: any) => {
+const getRoot = (
+  { req, detectedLanguage }: { req: Request; detectedLanguage: string },
+  pageData: any
+) => {
+  const userAgent = req.headers["user-agent"] || "";
   const deviceInfo = detectDevice(userAgent);
+
   return (
     <StrictMode>
-      <StaticRouter location={url}>
-        <DeviceProvider deviceInfo={deviceInfo}>
-          <App pageData={pageData} />
-        </DeviceProvider>
+      <Helmet>
+        <script>{`window.__INITIAL_DATA__ = ${JSON.stringify(
+          pageData || {}
+        )}`}</script>
+        <script>{`window.__INITIAL_LANGUAGE__ = ${JSON.stringify(
+          detectedLanguage
+        )}`}</script>
+      </Helmet>
+      <StaticRouter location={req.url}>
+        <App
+          pageData={pageData}
+          deviceInfo={deviceInfo}
+          initialLanguage={detectedLanguage}
+        />
       </StaticRouter>
     </StrictMode>
   );
 };
 
-export async function render(opt: Options) {
-  // 预加载页面数据
-  const pageData = await getPageDataForSSR(opt);
+export async function render({ req }: { req: Request; res: Response }) {
+  let pathWithoutLang = req.url;
+  let detectedLanguage = "zh-CN"; // 默认语言
 
-  return new Promise<{ html: string; head: string; pageData?: any }>((resolve, reject) => {
+  const result = detectServerLanguage(req);
+  detectedLanguage = result.language;
+  pathWithoutLang = result.pathWithoutLang;
+
+  const pageData = await pageDataLoader({
+    pathWithoutLang,
+    req,
+  });
+
+  return new Promise<{
+    html: string;
+    head: string;
+    htmlAttributes?: string;
+    pageData?: any;
+  }>((resolve, reject) => {
     const chunks: Buffer[] = [];
 
     const writable = new Writable({
@@ -43,33 +67,39 @@ export async function render(opt: Options) {
       final(callback) {
         const html = Buffer.concat(chunks).toString("utf-8");
 
-        // Extract head tags from Helmet after rendering
         const helmet = Helmet.renderStatic();
         const head = [
           helmet.title.toString(),
-          helmet.meta.toString(),
-          helmet.link.toString(),
-          helmet.script.toString(),
+          helmet.meta.toString().replace(/><meta/g, `>\n<meta`),
+          helmet.link.toString().replace(/><link/g, `>\n<link`),
+          helmet.script.toString().replace(/><script/g, `>\n<script`),
           helmet.style.toString(),
-        ].join("\n");
+        ]
+          .join("\n")
+          .replace(/ data-react-helmet="true"/g, "");
 
-        resolve({ html, head, pageData });
+        const htmlAttributes = helmet.htmlAttributes.toString();
+
+        resolve({ html, head, htmlAttributes, pageData });
         callback();
       },
     });
 
-    const stream = renderToPipeableStream(getRoot(opt, pageData), {
-      onShellReady() {
-        // The content above all Suspense boundaries is ready
-        stream.pipe(writable);
-      },
-      onShellError(error: unknown) {
-        // Something errored before we could complete the shell
-        reject(error);
-      },
-      onError(error: unknown) {
-        console.error("SSR Error:", error);
-      },
-    });
+    const stream = renderToPipeableStream(
+      getRoot({ req, detectedLanguage }, pageData),
+      {
+        onShellReady() {
+          // The content above all Suspense boundaries is ready
+          stream.pipe(writable);
+        },
+        onShellError(error: unknown) {
+          // Something errored before we could complete the shell
+          reject(error);
+        },
+        onError(error: unknown) {
+          console.error("SSR Error:", error);
+        },
+      }
+    );
   });
 }

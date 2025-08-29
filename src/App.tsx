@@ -1,86 +1,52 @@
 import "./App.scss";
-// @ts-ignore
 import routes from "virtual:generated-pages-react";
 import { useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { Suspense, createContext, useContext } from "react";
-import { usePageDataWithFallback } from "./utils/ssr/clientDataHydration";
+import HreflangTags from "./components/HreflangTags";
+import { useThemeInit } from "./hooks/useStore";
+import { useRef } from "react";
+import { createUserStore } from "./store/userStore";
+import { get } from "lodash-es";
+import { PageContext, UserContext } from "./components/CommonContexts";
+import { I18nextProvider } from "react-i18next";
+import { LocalizedRouteProvider } from "./components/LocalizedRoute";
+import { DeviceContext } from "./components/DeviceContext";
+import { setupI18n } from "./i18n";
+import { DeviceInfo } from "./types/device";
 
-// 创建页面数据上下文
-export const PageDataContext = createContext<Record<string, any> | null>(null);
-
-// 自定义Hook用于访问页面数据
-export const usePageData = () => {
-  return useContext(PageDataContext);
-};
+const langRoutes = routes.map((route) => ({
+  ...route,
+  path: `/:lang${route.path}`,
+}));
 
 interface AppProps {
   pageData?: any;
+  initialLanguage: string;
+  deviceInfo: DeviceInfo;
 }
 
-// 智能数据管理组件
-function AppWithDataFallback({ initialPageData }: { initialPageData?: any }) {
-  const { pageData, loading, error, refetch, isClientGenerated } =
-    usePageDataWithFallback();
+function App({ pageData, deviceInfo, initialLanguage }: AppProps) {
+  // 初始化主题
+  useThemeInit();
+  const userStore = useRef(createUserStore(get(pageData, "user"))).current;
 
-  // 使用初始数据或从Hook获取的数据
-  const finalPageData = initialPageData || pageData;
-
-  if (loading && !finalPageData) {
-    return (
-      <>
-        <Navigation />
-        <div className="container mx-auto px-4 py-8 text-center">
-          <p>正在加载数据...</p>
-        </div>
-      </>
-    );
-  }
-
-  if (error && !finalPageData) {
-    return (
-      <>
-        <Navigation />
-        <div className="container mx-auto px-4 py-8 text-center">
-          <p className="text-red-500">加载数据失败: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            重试
-          </button>
-        </div>
-      </>
-    );
-  }
+  const i18nInstance = setupI18n(initialLanguage);
 
   return (
-    <PageDataContext.Provider value={finalPageData}>
-      <Navigation />
-      <Suspense fallback={<p>Loading...</p>}>{useRoutes(routes)}</Suspense>
-      {/* 开发环境显示数据来源 */}
-      {process.env.NODE_ENV === "development" && finalPageData && (
-        <div className="fixed bottom-4 right-4 text-xs bg-gray-800 text-white px-2 py-1 rounded">
-          数据来源: {isClientGenerated ? "客户端" : "服务端"}
-        </div>
-      )}
-    </PageDataContext.Provider>
+    <I18nextProvider i18n={i18nInstance}>
+      <LocalizedRouteProvider language={initialLanguage}>
+        <DeviceContext.Provider value={{ deviceInfo }}>
+          <PageContext.Provider value={pageData}>
+            <UserContext.Provider value={userStore}>
+              <HreflangTags />
+              <Navigation />
+              <main>{useRoutes([...routes, ...langRoutes])}</main>
+            </UserContext.Provider>
+          </PageContext.Provider>
+        </DeviceContext.Provider>
+      </LocalizedRouteProvider>
+    </I18nextProvider>
   );
-}
-
-function App({ pageData }: AppProps) {
-  // 如果有初始页面数据（从服务端或客户端入口传入），直接使用传统方式
-  if (pageData) {
-    return (
-      <PageDataContext.Provider value={pageData}>
-        <Navigation />
-        <Suspense fallback={<p>Loading...</p>}>{useRoutes(routes)}</Suspense>
-      </PageDataContext.Provider>
-    );
-  }
-
-  // 否则使用智能回退方式
-  return <AppWithDataFallback initialPageData={pageData} />;
 }
 
 export default App;
